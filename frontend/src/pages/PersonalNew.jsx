@@ -204,10 +204,10 @@ const PersonalNew = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver
           </Button>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-police-navy to-police-navy-light bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold leading-normal pt-1 bg-gradient-to-r from-police-navy to-police-navy-light bg-clip-text text-transparent">
             Agregar Personal
           </h1>
-          <p className="text-slate-600 mt-2">
+          <p className="text-slate-600 mt-6">
             Complete todos los campos requeridos para registrar nuevo personal
             del Departamento D-2
           </p>
