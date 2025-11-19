@@ -78,7 +78,7 @@ export default function Dashboard() {
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: 'easeInOut',
           }}
         />
         <motion.div
@@ -90,7 +90,7 @@ export default function Dashboard() {
           transition={{
             duration: 10,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: 'easeInOut',
           }}
         />
       </div>
@@ -104,18 +104,21 @@ export default function Dashboard() {
       >
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex justify-between items-center">
-            <motion.div 
+            <motion.div
               className="flex items-center gap-4"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <motion.div 
+              <motion.div
                 className="relative w-14 h-14 bg-gradient-to-br from-police-navy via-police-navy-dark to-police-navy rounded-2xl flex items-center justify-center shadow-xl border-2 border-police-cyan/50"
                 whileHover={{ scale: 1.05, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                transition={{ type: 'spring', stiffness: 400 }}
               >
-                <Shield className="h-8 w-8 text-white drop-shadow-lg" strokeWidth={2.5} />
+                <Shield
+                  className="h-8 w-8 text-white drop-shadow-lg"
+                  strokeWidth={2.5}
+                />
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-police-cyan rounded-full border-2 border-white shadow-lg animate-pulse" />
               </motion.div>
               <div>
@@ -127,7 +130,7 @@ export default function Dashboard() {
                 </p>
               </div>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="flex items-center gap-4"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -137,7 +140,9 @@ export default function Dashboard() {
                 <p className="text-sm font-bold text-police-navy">
                   {user?.nombreCompleto || user?.username}
                 </p>
-                <p className="text-xs text-police-cyan capitalize font-semibold">{user?.rol}</p>
+                <p className="text-xs text-police-cyan capitalize font-semibold">
+                  {user?.rol}
+                </p>
               </div>
               <Button
                 variant="outline"
@@ -165,19 +170,20 @@ export default function Dashboard() {
           <motion.div
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: "spring" }}
+            transition={{ delay: 0.3, type: 'spring' }}
           >
             <h2 className="text-5xl font-extrabold bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan bg-clip-text text-transparent mb-6 leading-tight">
               Bienvenido, {user?.nombreCompleto || user?.username}
             </h2>
           </motion.div>
-          <motion.p 
+          <motion.p
             className="text-xl text-slate-600 max-w-3xl mx-auto font-medium"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Sistema de Gestión del Personal del Departamento de Inteligencia Criminal D-2
+            Sistema de Gestión del Personal del Departamento de Inteligencia
+            Criminal D-2
           </motion.p>
           <motion.div
             className="mt-6 flex items-center justify-center gap-3"
@@ -187,10 +193,17 @@ export default function Dashboard() {
           >
             <div className="flex items-center gap-2 px-4 py-2 bg-police-cyan/10 border border-police-cyan/30 rounded-full">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm text-slate-700 font-semibold">Sistema Activo</span>
+              <span className="text-sm text-slate-700 font-semibold">
+                Sistema Activo
+              </span>
             </div>
             <div className="px-4 py-2 bg-white/80 border border-slate-200 rounded-full text-sm text-slate-600 font-medium shadow-sm">
-              {new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              {new Date().toLocaleDateString('es-ES', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
             </div>
           </motion.div>
         </motion.div>
@@ -205,8 +218,8 @@ export default function Dashboard() {
           {menuOptions.map((option, index) => {
             const Icon = option.icon;
             return (
-              <motion.div 
-                key={index} 
+              <motion.div
+                key={index}
                 variants={item}
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.3 }}
@@ -216,14 +229,23 @@ export default function Dashboard() {
                   onClick={() => navigate(option.path)}
                 >
                   {/* Card Header with Icon */}
-                  <div className={`bg-gradient-to-br ${option.gradient} p-6 relative overflow-hidden`}>
+                  <div
+                    className={`bg-gradient-to-br ${option.gradient} p-6 relative overflow-hidden`}
+                  >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl transform translate-x-8 -translate-y-8" />
                     <motion.div
                       className="relative z-10"
                       whileHover={{ scale: 1.08, rotate: 3 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 15,
+                      }}
                     >
-                      <Icon className="w-16 h-16 text-white drop-shadow-lg" strokeWidth={2.5} />
+                      <Icon
+                        className="w-16 h-16 text-white drop-shadow-lg"
+                        strokeWidth={2.5}
+                      />
                     </motion.div>
                   </div>
 
@@ -271,19 +293,36 @@ export default function Dashboard() {
           <div className="flex items-center justify-center gap-8 flex-wrap">
             <div className="flex items-center gap-2 px-5 py-2.5 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl shadow-sm">
               <div className="w-2 h-2 bg-police-cyan rounded-full" />
-              <span className="text-sm font-semibold text-slate-700">Versión 1.0</span>
+              <span className="text-sm font-semibold text-slate-700">
+                Versión 1.0
+              </span>
             </div>
             <div className="flex items-center gap-2 px-5 py-2.5 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl shadow-sm">
-              <svg className="w-4 h-4 text-police-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-4 h-4 text-police-cyan"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               <span className="text-sm font-semibold text-slate-700">
-                Último acceso: {new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                Último acceso:{' '}
+                {new Date().toLocaleTimeString('es-ES', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
               </span>
             </div>
           </div>
           <p className="text-sm text-slate-500 font-medium">
-            Selecciona una opción para comenzar a gestionar el personal del departamento
+            Selecciona una opción para comenzar a gestionar el personal del
+            departamento
           </p>
         </motion.div>
       </main>
