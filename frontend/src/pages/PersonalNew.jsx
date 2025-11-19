@@ -158,7 +158,7 @@ const PersonalNew = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-slate-100 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -174,7 +174,7 @@ const PersonalNew = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver
           </Button>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-police-navy to-police-navy-light bg-clip-text text-transparent">
             Agregar Personal
           </h1>
           <p className="text-slate-600 mt-2">
@@ -197,7 +197,7 @@ const PersonalNew = () => {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Camera className="w-5 h-5 text-blue-600" />
+                <Camera className="w-5 h-5 text-police-navy" />
                 <CardTitle>Fotografía</CardTitle>
               </div>
               <CardDescription>Agregue una foto del personal (opcional)</CardDescription>
@@ -214,7 +214,7 @@ const PersonalNew = () => {
                 </div>
 
                 {/* Upload */}
-                <div {...getFotoRootProps()} className="flex-1 border-2 border-dashed border-slate-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50/50 transition-colors">
+                <div {...getFotoRootProps()} className="flex-1 border-2 border-dashed border-slate-300 rounded-lg p-6 text-center cursor-pointer hover:border-police-cyan hover:bg-police-cyan/5 transition-colors">
                   <input {...getFotoInputProps()} />
                   <Upload className="w-8 h-8 mx-auto text-slate-400 mb-2" />
                   <p className="text-sm text-slate-600">Click para seleccionar o arrastre una foto</p>
@@ -242,7 +242,7 @@ const PersonalNew = () => {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <User className="w-5 h-5 text-blue-600" />
+                <User className="w-5 h-5 text-police-navy" />
                 <CardTitle>Datos Personales</CardTitle>
               </div>
               <CardDescription>Información personal básica del efectivo</CardDescription>
@@ -356,7 +356,7 @@ const PersonalNew = () => {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-blue-600" />
+                <Briefcase className="w-5 h-5 text-police-navy" />
                 <CardTitle>Datos Laborales</CardTitle>
               </div>
               <CardDescription>Información del cargo y dependencia</CardDescription>
@@ -468,7 +468,7 @@ const PersonalNew = () => {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Phone className="w-5 h-5 text-blue-600" />
+                <Phone className="w-5 h-5 text-police-navy" />
                 <CardTitle>Información de Contacto</CardTitle>
               </div>
             </CardHeader>
@@ -498,7 +498,7 @@ const PersonalNew = () => {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-blue-600" />
+                <Shield className="w-5 h-5 text-police-navy" />
                 <CardTitle>Armamento Asignado</CardTitle>
               </div>
               <CardDescription>Información sobre el armamento asignado (opcional)</CardDescription>
@@ -520,13 +520,13 @@ const PersonalNew = () => {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <FileText className="w-5 h-5 text-blue-600" />
+                <FileText className="w-5 h-5 text-police-navy" />
                 <CardTitle>Archivos Adjuntos</CardTitle>
               </div>
               <CardDescription>Agregue documentos relacionados (opcional)</CardDescription>
             </CardHeader>
             <CardContent>
-              <div {...getArchivosRootProps()} className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50/50 transition-colors">
+              <div {...getArchivosRootProps()} className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center cursor-pointer hover:border-police-cyan hover:bg-police-cyan/5 transition-colors">
                 <input {...getArchivosInputProps()} />
                 <Upload className="w-12 h-12 mx-auto text-slate-400 mb-3" />
                 <p className="text-sm text-slate-600 mb-1">Click para seleccionar o arrastre archivos aquí</p>
@@ -567,7 +567,7 @@ const PersonalNew = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              className="bg-gradient-to-r from-police-navy to-police-navy-dark hover:from-police-navy-dark hover:to-police-navy border border-police-cyan/30"
             >
               {loading ? (
                 <>

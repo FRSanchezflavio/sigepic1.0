@@ -36,7 +36,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-police-navy-dark via-police-navy to-slate-800">
       {/* Animated background particles */}
       <div className="absolute inset-0">
         {[...Array(20)].map((_, i) => (
@@ -82,7 +82,7 @@ export default function Login() {
           transition={{ duration: 0.8 }}
         >
           <div
-            className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10 backdrop-blur-3xl"
+            className="absolute inset-0 bg-gradient-to-br from-police-cyan/10 to-police-navy/20 backdrop-blur-3xl"
             style={{ clipPath: 'polygon(0 0, 100% 0, 85% 100%, 0% 100%)' }}
           />
 
@@ -96,13 +96,13 @@ export default function Login() {
               }}
               className="mb-8"
             >
-              <div className="w-32 h-32 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/50">
+              <div className="w-32 h-32 mx-auto bg-gradient-to-br from-police-navy to-police-navy-dark rounded-2xl flex items-center justify-center shadow-2xl shadow-police-cyan/50 border-2 border-police-cyan/30">
                 <Shield className="w-16 h-16 text-white" strokeWidth={1.5} />
               </div>
             </motion.div>
 
             <motion.h1
-              className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+              className="text-5xl font-bold mb-4 bg-gradient-to-r from-police-cyan via-cyan-300 to-police-cyan bg-clip-text text-transparent"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -126,7 +126,7 @@ export default function Login() {
               transition={{ delay: 0.5 }}
             >
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                <div className="w-2 h-2 bg-police-cyan rounded-full animate-pulse" />
                 <span>Departamento de Inteligencia Criminal D-2</span>
               </div>
               <div className="flex items-center gap-3">
@@ -164,10 +164,10 @@ export default function Login() {
             >
               {/* Logo mobile */}
               <div className="lg:hidden mb-8 text-center">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-police-navy to-police-navy-dark rounded-2xl flex items-center justify-center mb-4 border-2 border-police-cyan/30">
                   <Shield className="w-10 h-10 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-police-cyan to-cyan-400 bg-clip-text text-transparent">
                   SIGEPIC
                 </h2>
               </div>
@@ -249,7 +249,7 @@ export default function Login() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-6 rounded-xl shadow-lg shadow-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/75 hover:scale-[1.02]"
+                  className="w-full bg-gradient-to-r from-police-navy to-police-navy-dark hover:from-police-navy-dark hover:to-police-navy text-white font-semibold py-6 rounded-xl shadow-lg shadow-police-cyan/30 transition-all duration-300 hover:shadow-xl hover:shadow-police-cyan/50 hover:scale-[1.02] border border-police-cyan/30"
                 >
                   {loading ? (
                     <motion.div
@@ -276,7 +276,7 @@ export default function Login() {
 
             {/* Floating elements */}
             <motion.div
-              className="absolute top-20 right-20 w-20 h-20 bg-blue-500/10 rounded-full blur-xl"
+              className="absolute top-20 right-20 w-20 h-20 bg-police-cyan/10 rounded-full blur-xl"
               animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.3, 0.6, 0.3],

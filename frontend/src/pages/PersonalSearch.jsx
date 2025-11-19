@@ -156,7 +156,7 @@ const PersonalSearch = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-slate-100 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -174,7 +174,7 @@ const PersonalSearch = () => {
           </Button>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-police-navy to-police-navy-light bg-clip-text text-transparent">
                 Buscar Personal
               </h1>
               <p className="text-slate-600 mt-2">
@@ -185,7 +185,7 @@ const PersonalSearch = () => {
               <Button
                 onClick={handleDescargarPlanillas}
                 disabled={loading}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                className="bg-gradient-to-r from-police-navy to-police-navy-dark hover:from-police-navy-dark hover:to-police-navy border border-police-cyan/30"
               >
                 {loading ? (
                   <>

@@ -4,6 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
+        police: {
+          navy: '#1a2f4a',
+          'navy-dark': '#0f1d2e',
+          'navy-light': '#2d4a6f',
+          cyan: '#5dade2',
+          'cyan-dark': '#3498db',
+          'cyan-light': '#85c1e9',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

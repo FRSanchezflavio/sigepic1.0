@@ -137,7 +137,7 @@ export default function PersonalList() {
                         <span
                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                             p.estadoServicio === 'ACTIVO'
-                              ? 'bg-green-100 text-green-800'
+                              ? 'bg-cyan-100 text-cyan-900 border border-cyan-300'
                               : 'bg-gray-100 text-gray-800'
                           }`}
                         >
