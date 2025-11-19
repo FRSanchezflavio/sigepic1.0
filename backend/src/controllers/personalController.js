@@ -111,6 +111,61 @@ const crear = async (req, res, next) => {
     const datos = req.body;
     const usuarioId = req.user.id;
 
+    console.log('Datos recibidos:', datos);
+    console.log('Archivos recibidos:', req.files);
+
+    // Convertir valores booleanos desde FormData (vienen como strings)
+    const booleanFields = [
+      'conduceAutos', 
+      'conduceMotos', 
+      'conduceOtros', 
+      'poseeCarnetManejo', 
+      'poseeCredencialPolicial', 
+      'poseeChalecoAsignado'
+    ];
+    
+    booleanFields.forEach(field => {
+      if (datos[field] !== undefined) {
+        datos[field] = datos[field] === 'true' || datos[field] === true;
+      }
+    });
+
+    // Asignar jerarquia desde jerarquiaId si existe
+    if (datos.jerarquiaId) {
+      datos.jerarquia = datos.jerarquiaId;
+    }
+
+    // Asignar seccion desde seccionId si existe
+    if (datos.seccionId) {
+      datos.seccion = datos.seccionId;
+    }
+
+    // Manejar foto si se subió (viene de req.files.foto)
+    if (req.files && req.files.foto && req.files.foto[0]) {
+      datos.fotoUrl = `/uploads/fotos/${req.files.foto[0].filename}`;
+    }
+
+    // Manejar archivos adjuntos si se subieron
+    if (req.files && req.files.archivos && req.files.archivos.length > 0) {
+      const archivos = req.files.archivos.map(file => ({
+        nombre: file.originalname,
+        url: `/uploads/documentos/${file.filename}`,
+        tipo: file.mimetype,
+        tamano: file.size,
+        fecha: new Date(),
+      }));
+      datos.archivosAdjuntos = archivos;
+    }
+
+    // Limpiar campos vacíos o null (excepto booleanos que pueden ser false)
+    Object.keys(datos).forEach(key => {
+      if (datos[key] === '' || datos[key] === 'null' || datos[key] === 'undefined') {
+        delete datos[key];
+      }
+    });
+
+    console.log('Datos procesados para crear:', datos);
+
     const personal = await prisma.personal.create({
       data: {
         ...datos,
@@ -138,6 +193,8 @@ const crear = async (req, res, next) => {
 
     res.status(201).json(personal);
   } catch (error) {
+    console.error('Error completo al crear personal:', error);
+    logger.error('Error al crear personal:', error);
     next(error);
   }
 };

@@ -10,7 +10,15 @@ export const personalService = {
   },
 
   crear: async datos => {
-    return await api.post('/personal', datos);
+    return await api.post('/personal', datos, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+
+  create: async datos => {
+    return await api.post('/personal', datos, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
   },
 
   actualizar: async (id, datos) => {

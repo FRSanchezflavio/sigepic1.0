@@ -17,6 +17,7 @@ export default function Login() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    2024;
     setError('');
     setLoading(true);
 
@@ -269,7 +270,7 @@ export default function Login() {
 
               <div className="mt-6 text-center">
                 <p className="text-sm text-slate-500">
-                  © 2024 Departamento de Inteligencia Criminal D-2
+                  © 2025 Departamento de Inteligencia Criminal D-2
                 </p>
               </div>
             </motion.div>

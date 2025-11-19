@@ -1,111 +1,97 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
-}
-
-// ==========================================
-// MODELO: Usuario
-// ==========================================
 model Usuario {
-  id              Int              @id @default(autoincrement())
-  username        String           @unique @db.VarChar(50)
-  passwordHash    String           @map("password_hash") @db.VarChar(255)
-  nombreCompleto  String?          @map("nombre_completo") @db.VarChar(150)
-  email           String?          @unique @db.VarChar(100)
-  rol             String           @default("usuario") @db.VarChar(30)
-  activo          Boolean          @default(true)
-  ultimoAcceso    DateTime?        @map("ultimo_acceso")
-  intentosFallidos Int             @default(0) @map("intentos_fallidos")
-  bloqueadoHasta  DateTime?        @map("bloqueado_hasta")
-  cambiarPassword Boolean          @default(false) @map("cambiar_password")
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  
-  // Relaciones
-  personales      Personal[]
-  auditoria       Auditoria[]
-  sesiones        Sesion[]
-  
+  id               Int         @id @default(autoincrement())
+  username         String      @unique @db.VarChar(50)
+  passwordHash     String      @map("password_hash") @db.VarChar(255)
+  nombreCompleto   String?     @map("nombre_completo") @db.VarChar(150)
+  email            String?     @unique @db.VarChar(100)
+  rol              String      @default("usuario") @db.VarChar(30)
+  activo           Boolean     @default(true)
+  ultimoAcceso     DateTime?   @map("ultimo_acceso")
+  intentosFallidos Int         @default(0) @map("intentos_fallidos")
+  bloqueadoHasta   DateTime?   @map("bloqueado_hasta")
+  cambiarPassword  Boolean     @default(false) @map("cambiar_password")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+  auditoria        Auditoria[]
+  personales       Personal[]
+  sesiones         Sesion[]
+
   @@index([username])
   @@index([email])
   @@index([activo])
   @@map("usuarios")
 }
 
-// ==========================================
-// MODELO: Personal
-// ==========================================
 model Personal {
-  id                  Int              @id @default(autoincrement())
-  
-  // Datos Personales
-  apellidos           String           @db.VarChar(100)
-  nombres             String           @db.VarChar(100)
-  numeroAsignacion    String           @unique @map("numero_asignacion") @db.VarChar(50)
-  dni                 String           @unique @db.VarChar(20)
-  cuil                String?          @unique @db.VarChar(20)
-  fechaNacimiento     DateTime         @map("fecha_nacimiento") @db.Date
-  estadoCivil         String?          @map("estado_civil") @db.VarChar(20)
-  sexo                String?          @db.VarChar(20)
-  email               String?          @db.VarChar(100)
-  celular             String?          @db.VarChar(50)
-  domicilio           String?
-  
-  // Datos Jerárquicos
-  tipoPersonal        String           @map("tipo_personal") @db.VarChar(30) // "SUPERIOR" o "SUBALTERNO"
-  jerarquiaId         Int?             @map("jerarquia_id")
-  jerarquia           String           @db.VarChar(50)
-  numeroCargo         String?          @map("numero_cargo") @db.VarChar(50)
-  cargo               String?          @db.VarChar(100)
-  seccionId           Int?             @map("seccion_id")
-  seccion             String?          @db.VarChar(100)
-  funcionDepto        String?          @map("funcion_depto")
-  
-  // Datos Laborales
-  altaDependencia     DateTime?        @map("alta_dependencia") @db.Date
-  bajaDependencia     DateTime?        @map("baja_dependencia") @db.Date
-  motivoBaja          String?          @map("motivo_baja")
-  estadoServicio      String           @default("ACTIVO") @map("estado_servicio") @db.VarChar(20)
-  horarioLaboral      String?          @map("horario_laboral") @db.VarChar(100)
-  profesion           String?          @db.VarChar(100)
-  
-  // Datos Administrativos
-  subsidioSalud       String?          @map("subsidio_salud") @db.VarChar(50)
-  prontuario          String?          @db.VarChar(50)
-  jurisdiccion        String?          @db.VarChar(100)
-  regional            String?          @db.VarChar(100)
-  
-  // Equipamiento
-  arma                String?          @db.VarChar(100)
-  numeroArma          String?          @map("numero_arma") @db.VarChar(50)
-  chaleco             String?          @db.VarChar(100)
-  numeroChaleco       String?          @map("numero_chaleco") @db.VarChar(50)
-  
-  // Archivos
-  fotoUrl             String?          @map("foto_url") @db.VarChar(255)
-  archivosAdjuntos    Json             @default("[]") @map("archivos_adjuntos")
-  
-  // Observaciones
-  observaciones       String?
-  
-  // Metadata
-  createdAt           DateTime         @default(now()) @map("created_at")
-  updatedAt           DateTime         @updatedAt @map("updated_at")
-  createdBy           Int?             @map("created_by")
-  updatedBy           Int?             @map("updated_by")
-  
-  // Relaciones
-  usuario             Usuario?         @relation(fields: [createdBy], references: [id])
-  auditoria           Auditoria[]
-  licencias           Licencia[]
-  capacitaciones      Capacitacion[]
-  sanciones           Sancion[]
-  
+  id                      Int            @id @default(autoincrement())
+  apellidos               String         @db.VarChar(100)
+  nombres                 String         @db.VarChar(100)
+  numeroAsignacion        String?        @unique @map("numero_asignacion") @db.VarChar(50)
+  dni                     String         @unique @db.VarChar(20)
+  cuil                    String?        @unique @db.VarChar(20)
+  fechaNacimiento         String         @map("fecha_nacimiento") @db.VarChar(50)
+  estadoCivil             String?        @map("estado_civil") @db.VarChar(20)
+  sexo                    String?        @db.VarChar(20)
+  grupoSanguineo          String?        @map("grupo_sanguineo") @db.VarChar(10)
+  nacionalidad            String?        @db.VarChar(50)
+  email                   String?        @db.VarChar(100)
+  celular                 String?        @db.VarChar(50)
+  domicilio               String?
+  localidad               String?        @db.VarChar(100)
+  tipoPersonal            String         @map("tipo_personal") @db.VarChar(30)
+  jerarquiaId             String?        @map("jerarquia_id") @db.VarChar(50)
+  jerarquia               String?        @db.VarChar(50)
+  numeroCargo             String?        @map("numero_cargo") @db.VarChar(50)
+  cargo                   String?        @db.VarChar(100)
+  seccionId               String?        @map("seccion_id") @db.VarChar(100)
+  seccion                 String?        @db.VarChar(100)
+  funcionDepto            String?        @map("funcion_depto")
+  altaDependencia         DateTime?      @map("alta_dependencia") @db.Date
+  altaReparticion         String?        @map("alta_reparticion") @db.VarChar(50)
+  altaDepartamental       String?        @map("alta_departamental") @db.VarChar(50)
+  bajaDependencia         DateTime?      @map("baja_dependencia") @db.Date
+  motivoBaja              String?        @map("motivo_baja")
+  estadoServicio          String         @default("ACTIVO") @map("estado_servicio") @db.VarChar(20)
+  horarioLaboral          String?        @map("horario_laboral") @db.VarChar(100)
+  profesion               String?        @db.VarChar(100)
+  subsidioSalud           String?        @map("subsidio_salud") @db.VarChar(50)
+  prontuario              String?        @db.VarChar(50)
+  jurisdiccion            String?        @db.VarChar(100)
+  regional                String?        @db.VarChar(100)
+  arma                    String?        @map("arma") @db.VarChar(100)
+  numeroArma              String?        @map("numero_arma") @db.VarChar(50)
+  armaTipo                String?        @map("arma_tipo") @db.VarChar(100)
+  nroArma                 String?        @map("nro_arma") @db.VarChar(50)
+  poseeChalecoAsignado    Boolean?       @default(false) @map("posee_chaleco_asignado")
+  nroSerieChalecoAsignado String?        @map("nro_serie_chaleco_asignado") @db.VarChar(50)
+  poseeCarnetManejo       Boolean?       @default(false) @map("posee_carnet_manejo")
+  conduceAutos            Boolean?       @default(false) @map("conduce_autos")
+  conduceMotos            Boolean?       @default(false) @map("conduce_motos")
+  conduceOtros            Boolean?       @default(false) @map("conduce_otros")
+  poseeCredencialPolicial Boolean?       @default(false) @map("posee_credencial_policial")
+  fotoUrl                 String?        @map("foto_url") @db.VarChar(255)
+  archivosAdjuntos        Json           @default("[]") @map("archivos_adjuntos")
+  observaciones           String?
+  createdAt               DateTime       @default(now()) @map("created_at")
+  updatedAt               DateTime       @updatedAt @map("updated_at")
+  createdBy               Int?           @map("created_by")
+  updatedBy               Int?           @map("updated_by")
+  auditoria               Auditoria[]
+  capacitaciones          Capacitacion[]
+  licencias               Licencia[]
+  usuario                 Usuario?       @relation(fields: [createdBy], references: [id])
+  sanciones               Sancion[]
+
   @@index([dni])
   @@index([numeroAsignacion])
   @@index([tipoPersonal])
@@ -116,183 +102,149 @@ model Personal {
   @@map("personal")
 }
 
-// ==========================================
-// MODELO: Auditoría
-// ==========================================
 model Auditoria {
-  id              Int              @id @default(autoincrement())
-  tabla           String           @db.VarChar(50)
-  registroId      Int              @map("registro_id")
-  accion          String           @db.VarChar(20)
-  cambios         Json
-  ip              String?          @db.VarChar(45)
-  userAgent       String?          @map("user_agent")
-  usuarioId       Int              @map("usuario_id")
-  personalId      Int?             @map("personal_id")
-  timestamp       DateTime         @default(now())
-  
-  // Relaciones
-  usuario         Usuario          @relation(fields: [usuarioId], references: [id])
-  personal        Personal?        @relation(fields: [personalId], references: [id])
-  
+  id         Int       @id @default(autoincrement())
+  tabla      String    @db.VarChar(50)
+  registroId Int       @map("registro_id")
+  accion     String    @db.VarChar(20)
+  cambios    Json
+  ip         String?   @db.VarChar(45)
+  userAgent  String?   @map("user_agent")
+  usuarioId  Int       @map("usuario_id")
+  personalId Int?      @map("personal_id")
+  timestamp  DateTime  @default(now())
+  personal   Personal? @relation(fields: [personalId], references: [id])
+  usuario    Usuario   @relation(fields: [usuarioId], references: [id])
+
   @@index([tabla, registroId])
   @@index([usuarioId])
   @@index([timestamp])
   @@map("auditoria")
 }
 
-// ==========================================
-// MODELO: Jerarquía
-// ==========================================
 model Jerarquia {
-  id              Int              @id @default(autoincrement())
-  tipo            String           @db.VarChar(20)
-  nombre          String           @unique @db.VarChar(100)
-  abreviatura     String?          @db.VarChar(10)
-  orden           Int
-  salario         Decimal?         @db.Decimal(10, 2)
-  activo          Boolean          @default(true)
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  
+  id          Int      @id @default(autoincrement())
+  tipo        String   @db.VarChar(20)
+  nombre      String   @unique @db.VarChar(100)
+  abreviatura String?  @db.VarChar(10)
+  orden       Int
+  salario     Decimal? @db.Decimal(10, 2)
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
   @@unique([tipo, nombre])
   @@index([tipo])
   @@index([activo])
   @@map("jerarquias")
 }
 
-// ==========================================
-// MODELO: Sección
-// ==========================================
 model Seccion {
-  id              Int              @id @default(autoincrement())
-  nombre          String           @unique @db.VarChar(100)
-  codigo          String?          @unique @db.VarChar(20)
-  descripcion     String?
-  jefe            String?          @db.VarChar(150)
-  telefono        String?          @db.VarChar(50)
-  activo          Boolean          @default(true)
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  
+  id          Int      @id @default(autoincrement())
+  nombre      String   @unique @db.VarChar(100)
+  codigo      String?  @unique @db.VarChar(20)
+  descripcion String?
+  jefe        String?  @db.VarChar(150)
+  telefono    String?  @db.VarChar(50)
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
   @@index([activo])
   @@map("secciones")
 }
 
-// ==========================================
-// MODELO: Sesión
-// ==========================================
 model Sesion {
-  id              String           @id @default(uuid())
-  usuarioId       Int              @map("usuario_id")
-  token           String           @unique @db.VarChar(500)
-  refreshToken    String?          @unique @map("refresh_token") @db.VarChar(500)
-  ip              String           @db.VarChar(45)
-  userAgent       String           @map("user_agent")
-  expiraEn        DateTime         @map("expira_en")
-  activo          Boolean          @default(true)
-  createdAt       DateTime         @default(now()) @map("created_at")
-  
-  // Relaciones
-  usuario         Usuario          @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-  
+  id           String   @id @default(uuid())
+  usuarioId    Int      @map("usuario_id")
+  token        String   @unique @db.VarChar(500)
+  refreshToken String?  @unique @map("refresh_token") @db.VarChar(500)
+  ip           String   @db.VarChar(45)
+  userAgent    String   @map("user_agent")
+  expiraEn     DateTime @map("expira_en")
+  activo       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  usuario      Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
   @@index([usuarioId])
   @@index([token])
   @@index([activo])
   @@map("sesiones")
 }
 
-// ==========================================
-// MODELO: Licencia
-// ==========================================
 model Licencia {
-  id              Int              @id @default(autoincrement())
-  personalId      Int              @map("personal_id")
-  tipo            String           @db.VarChar(50)
-  fechaInicio     DateTime         @map("fecha_inicio") @db.Date
-  fechaFin        DateTime         @map("fecha_fin") @db.Date
-  dias            Int
-  motivo          String?
-  documentoUrl    String?          @map("documento_url") @db.VarChar(255)
-  estado          String           @default("APROBADA") @db.VarChar(20)
-  observaciones   String?
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  
-  // Relaciones
-  personal        Personal         @relation(fields: [personalId], references: [id], onDelete: Cascade)
-  
+  id            Int      @id @default(autoincrement())
+  personalId    Int      @map("personal_id")
+  tipo          String   @db.VarChar(50)
+  fechaInicio   DateTime @map("fecha_inicio") @db.Date
+  fechaFin      DateTime @map("fecha_fin") @db.Date
+  dias          Int
+  motivo        String?
+  documentoUrl  String?  @map("documento_url") @db.VarChar(255)
+  estado        String   @default("APROBADA") @db.VarChar(20)
+  observaciones String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  personal      Personal @relation(fields: [personalId], references: [id], onDelete: Cascade)
+
   @@index([personalId])
   @@index([fechaInicio])
   @@index([estado])
   @@map("licencias")
 }
 
-// ==========================================
-// MODELO: Capacitación
-// ==========================================
 model Capacitacion {
-  id              Int              @id @default(autoincrement())
-  personalId      Int              @map("personal_id")
-  nombre          String           @db.VarChar(200)
-  institucion     String           @db.VarChar(200)
-  fechaInicio     DateTime         @map("fecha_inicio") @db.Date
-  fechaFin        DateTime?        @map("fecha_fin") @db.Date
-  duracionHoras   Int?             @map("duracion_horas")
-  certificadoUrl  String?          @map("certificado_url") @db.VarChar(255)
-  estado          String           @default("COMPLETADO") @db.VarChar(20)
-  calificacion    Decimal?         @db.Decimal(4, 2)
-  observaciones   String?
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  
-  // Relaciones
-  personal        Personal         @relation(fields: [personalId], references: [id], onDelete: Cascade)
-  
+  id             Int       @id @default(autoincrement())
+  personalId     Int       @map("personal_id")
+  nombre         String    @db.VarChar(200)
+  institucion    String    @db.VarChar(200)
+  fechaInicio    DateTime  @map("fecha_inicio") @db.Date
+  fechaFin       DateTime? @map("fecha_fin") @db.Date
+  duracionHoras  Int?      @map("duracion_horas")
+  certificadoUrl String?   @map("certificado_url") @db.VarChar(255)
+  estado         String    @default("COMPLETADO") @db.VarChar(20)
+  calificacion   Decimal?  @db.Decimal(4, 2)
+  observaciones  String?
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  personal       Personal  @relation(fields: [personalId], references: [id], onDelete: Cascade)
+
   @@index([personalId])
   @@index([estado])
   @@map("capacitaciones")
 }
 
-// ==========================================
-// MODELO: Sanción
-// ==========================================
 model Sancion {
-  id              Int              @id @default(autoincrement())
-  personalId      Int              @map("personal_id")
-  tipo            String           @db.VarChar(50)
-  fecha           DateTime         @db.Date
-  motivo          String
-  resolucion      String?          @db.VarChar(100)
-  diasSuspension  Int?             @map("dias_suspension")
-  documentoUrl    String?          @map("documento_url") @db.VarChar(255)
-  estado          String           @default("ACTIVA") @db.VarChar(20)
-  observaciones   String?
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  
-  // Relaciones
-  personal        Personal         @relation(fields: [personalId], references: [id], onDelete: Cascade)
-  
+  id             Int      @id @default(autoincrement())
+  personalId     Int      @map("personal_id")
+  tipo           String   @db.VarChar(50)
+  fecha          DateTime @db.Date
+  motivo         String
+  resolucion     String?  @db.VarChar(100)
+  diasSuspension Int?     @map("dias_suspension")
+  documentoUrl   String?  @map("documento_url") @db.VarChar(255)
+  estado         String   @default("ACTIVA") @db.VarChar(20)
+  observaciones  String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  personal       Personal @relation(fields: [personalId], references: [id], onDelete: Cascade)
+
   @@index([personalId])
   @@index([fecha])
   @@index([estado])
   @@map("sanciones")
 }
 
-// ==========================================
-// MODELO: Configuración
-// ==========================================
 model Configuracion {
-  id              Int              @id @default(autoincrement())
-  clave           String           @unique @db.VarChar(100)
-  valor           String
-  tipo            String           @default("string") @db.VarChar(20)
-  descripcion     String?
-  editable        Boolean          @default(true)
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  
+  id          Int      @id @default(autoincrement())
+  clave       String   @unique @db.VarChar(100)
+  valor       String
+  tipo        String   @default("string") @db.VarChar(20)
+  descripcion String?
+  editable    Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
   @@index([clave])
   @@map("configuracion")
 }

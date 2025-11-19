@@ -13,6 +13,7 @@ const {
 const {
   uploadFoto,
   uploadArchivos,
+  uploadPersonalCompleto,
 } = require('../middlewares/uploadMiddleware');
 
 // Todas las rutas requieren autenticación
@@ -50,7 +51,7 @@ router.get(
 router.post(
   '/',
   verificarPermiso('personal', 'create'),
-  validarDatos(schemaPersonal),
+  uploadPersonalCompleto,
   personalController.crear
 );
 
