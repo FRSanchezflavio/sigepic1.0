@@ -15,7 +15,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -31,7 +31,7 @@ export default function Login() {
     setLoading(false);
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -44,15 +44,25 @@ export default function Login() {
             key={i}
             className="absolute w-2 h-2 bg-blue-500/20 rounded-full"
             animate={{
-              x: [Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920), Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920)],
-              y: [Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080), Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080)],
+              x: [
+                Math.random() *
+                  (typeof window !== 'undefined' ? window.innerWidth : 1920),
+                Math.random() *
+                  (typeof window !== 'undefined' ? window.innerWidth : 1920),
+              ],
+              y: [
+                Math.random() *
+                  (typeof window !== 'undefined' ? window.innerHeight : 1080),
+                Math.random() *
+                  (typeof window !== 'undefined' ? window.innerHeight : 1080),
+              ],
               scale: [1, 1.5, 1],
               opacity: [0.2, 0.5, 0.2],
             }}
             transition={{
               duration: Math.random() * 10 + 10,
               repeat: Infinity,
-              ease: "linear",
+              ease: 'linear',
             }}
             style={{
               left: Math.random() * 100 + '%',
@@ -71,14 +81,19 @@ export default function Login() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10 backdrop-blur-3xl" 
-               style={{ clipPath: 'polygon(0 0, 100% 0, 85% 100%, 0% 100%)' }} />
-          
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10 backdrop-blur-3xl"
+            style={{ clipPath: 'polygon(0 0, 100% 0, 85% 100%, 0% 100%)' }}
+          />
+
           <div className="relative z-10 max-w-md">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1, rotate: [0, 360] }}
-              transition={{ duration: 1, rotate: { duration: 20, repeat: Infinity, ease: "linear" } }}
+              transition={{
+                duration: 1,
+                rotate: { duration: 20, repeat: Infinity, ease: 'linear' },
+              }}
               className="mb-8"
             >
               <div className="w-32 h-32 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/50">
@@ -115,13 +130,17 @@ export default function Login() {
                 <span>Departamento de Inteligencia Criminal D-2</span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" 
-                     style={{ animationDelay: '0.5s' }} />
+                <div
+                  className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"
+                  style={{ animationDelay: '0.5s' }}
+                />
                 <span>Gestión integral de personal policial</span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-pink-500 rounded-full animate-pulse" 
-                     style={{ animationDelay: '1s' }} />
+                <div
+                  className="w-2 h-2 bg-pink-500 rounded-full animate-pulse"
+                  style={{ animationDelay: '1s' }}
+                />
                 <span>Seguridad y control de acceso</span>
               </div>
             </motion.div>
@@ -154,8 +173,12 @@ export default function Login() {
               </div>
 
               <div className="mb-8">
-                <h3 className="text-2xl font-bold text-white mb-2">Bienvenido</h3>
-                <p className="text-slate-400">Ingresa tus credenciales para continuar</p>
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  Bienvenido
+                </h3>
+                <p className="text-slate-400">
+                  Ingresa tus credenciales para continuar
+                </p>
               </div>
 
               {error && (
@@ -214,7 +237,11 @@ export default function Login() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
                     >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      {showPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -227,7 +254,11 @@ export default function Login() {
                   {loading ? (
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                        ease: 'linear',
+                      }}
                       className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
                     />
                   ) : (
@@ -253,7 +284,7 @@ export default function Login() {
               transition={{
                 duration: 4,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: 'easeInOut',
               }}
             />
             <motion.div
@@ -265,7 +296,7 @@ export default function Login() {
               transition={{
                 duration: 5,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: 'easeInOut',
               }}
             />
           </div>

@@ -370,10 +370,12 @@ const generarPlanillas = async (req, res, next) => {
     }
 
     // Generar PDF
-    const { filePath, fileName } = await pdfService.generarPlanillasPersonal(personal);
+    const { filePath, fileName } = await pdfService.generarPlanillasPersonal(
+      personal
+    );
 
     // Enviar archivo
-    res.download(filePath, fileName, (err) => {
+    res.download(filePath, fileName, err => {
       if (err) {
         console.error('Error al enviar archivo:', err);
         next(err);

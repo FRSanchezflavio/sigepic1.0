@@ -27,11 +27,13 @@
 ### Datos creados en el seed:
 
 - **Usuario Admin:**
+
   - Username: `admin`
   - Password: `Admin123!`
   - Email: admin@d2.gob.ar
 
 - **8 Registros de Personal:**
+
   1. **GARCÍA LÓPEZ, Juan Carlos** - Comisario General (SUPERIOR)
   2. **FERNÁNDEZ DÍAZ, María Victoria** - Comisario Mayor (SUPERIOR)
   3. **RODRÍGUEZ PÉREZ, Carlos Alberto** - Comisario (SUPERIOR)
@@ -54,6 +56,7 @@
 **Objetivo:** Verificar que el login funciona y el dashboard muestra las 3 opciones
 
 **Pasos:**
+
 1. Acceder a `http://localhost:5173`
 2. Ingresar credenciales: `admin` / `Admin123!`
 3. Verificar que se muestra el Dashboard con 3 cards:
@@ -70,6 +73,7 @@
 **Objetivo:** Verificar que todos los campos del formulario funcionan correctamente
 
 **Pasos:**
+
 1. Desde el Dashboard, hacer clic en "Agregar Personal"
 2. Completar todos los campos obligatorios:
    - **Datos Personales:** Apellidos, Nombres, N° Asignación, DNI, CUIL, Fecha Nacimiento, Sexo, Estado Civil
@@ -82,6 +86,7 @@
 4. Hacer clic en "Guardar"
 
 **Verificaciones:**
+
 - [ ] Filtro de jerarquía se actualiza según tipoPersonal (SUPERIOR/SUBALTERNO)
 - [ ] Date picker funciona con locale español
 - [ ] Preview de foto se muestra
@@ -96,6 +101,7 @@
 **Objetivo:** Verificar filtros, selección y descarga de planillas
 
 **Pasos:**
+
 1. Desde el Dashboard, hacer clic en "Buscar Personal"
 2. **Verificar filtros:**
    - Buscar por nombre: "García"
@@ -112,6 +118,7 @@
    - Con 3 personas seleccionadas: hacer clic en "Descargar Planilla (3)"
 
 **Verificaciones:**
+
 - [ ] Filtros funcionan correctamente
 - [ ] Resultados se actualizan en tiempo real
 - [ ] Checkboxes individuales funcionan
@@ -127,42 +134,44 @@
 **Objetivo:** Verificar contenido y formato de las planillas PDF
 
 **Pasos:**
+
 1. Descargar una planilla desde PersonalSearch
 2. Abrir el PDF descargado
 3. **Verificar contenido:**
    - Header institucional (Policía Boliviana, D-2)
    - Foto del personal (si existe) en la esquina superior derecha (100x120px)
    - **Columna Izquierda - Datos Personales:**
-     * Apellidos y Nombres
-     * DNI
-     * CUIL
-     * Fecha de Nacimiento
-     * Sexo
-     * Estado Civil
-     * Profesión
-     * Prontuario
+     - Apellidos y Nombres
+     - DNI
+     - CUIL
+     - Fecha de Nacimiento
+     - Sexo
+     - Estado Civil
+     - Profesión
+     - Prontuario
    - **Columna Izquierda - Datos de Contacto:**
-     * Celular
-     * Email
-     * Domicilio
+     - Celular
+     - Email
+     - Domicilio
    - **Columna Derecha - Datos Laborales:**
-     * N° de Asignación
-     * Tipo de Personal
-     * Jerarquía
-     * N° de Cargo
-     * Sección
-     * Función Depto
-     * Horario Laboral
-     * Alta Dependencia
-     * Jurisdicción
-     * Regional
-     * Subsidio Salud
+     - N° de Asignación
+     - Tipo de Personal
+     - Jerarquía
+     - N° de Cargo
+     - Sección
+     - Función Depto
+     - Horario Laboral
+     - Alta Dependencia
+     - Jurisdicción
+     - Regional
+     - Subsidio Salud
    - **Columna Derecha - Armamento:**
-     * Tipo de Arma
-     * N° de Arma
+     - Tipo de Arma
+     - N° de Arma
    - Footer con fecha/hora de generación
 
 **Verificaciones:**
+
 - [ ] Todas las secciones presentes
 - [ ] Foto se muestra correctamente (si existe)
 - [ ] Datos completos y correctos
@@ -177,6 +186,7 @@
 **Objetivo:** Verificar que se puede editar un registro existente
 
 **Pasos:**
+
 1. Acceder al listado de personal
 2. Hacer clic en editar uno de los registros creados en el seed
 3. Modificar algunos campos
@@ -184,6 +194,7 @@
 5. Verificar que los cambios se guardaron
 
 **Verificaciones:**
+
 - [ ] Formulario se pre-llena con datos existentes
 - [ ] Foto actual se muestra
 - [ ] Campos se pueden modificar
@@ -195,20 +206,25 @@
 ## 🚀 Comandos para Iniciar Testing
 
 ### **Backend:**
+
 ```bash
 cd backend
 npm run dev
 ```
+
 **Puerto:** http://localhost:3000
 
 ### **Frontend:**
+
 ```bash
 cd frontend
 npm run dev
 ```
+
 **Puerto:** http://localhost:5173
 
 ### **Re-ejecutar Seeds (si es necesario):**
+
 ```bash
 cd backend
 npx prisma db seed
@@ -219,17 +235,20 @@ npx prisma db seed
 ## 🐛 Checklist de Problemas Conocidos
 
 ### Backend:
+
 - [ ] Verificar que validators.js usa los campos correctos (jerarquiaId, seccionId, arma, numeroArma)
 - [ ] Verificar que el endpoint POST /api/personal/planillas funciona
 - [ ] Verificar que generarPlanillasPersonal() genera PDFs correctos
 
 ### Frontend:
+
 - [ ] Verificar que PersonalNew usa los campos correctos del schema
 - [ ] Verificar que PersonalSearch envía los IDs correctamente al endpoint
 - [ ] Verificar que los filtros de jerarquía/sección funcionan
 - [ ] Verificar que el upload de archivos funciona
 
 ### Base de Datos:
+
 - [ ] Verificar que el schema tiene todos los campos necesarios
 - [ ] Verificar que los seeds crean datos válidos
 
@@ -237,12 +256,12 @@ npx prisma db seed
 
 ## 📝 Registro de Issues Encontrados
 
-| # | Descripción | Estado | Solución |
-|---|-------------|--------|----------|
-| 1 | Campo `jerarquia` obligatorio en schema pero falta en seed | ✅ Resuelto | Agregado campo `jerarquia` (String) a todos los registros |
-| 2 | Campo `armaTipo`/`nroArma` no existe en schema | ✅ Resuelto | Cambiado a `arma`/`numeroArma` según schema |
-| 3 | Variable `secciones` duplicada en seed.js | ✅ Resuelto | Renombrado a `seccionesDb` |
-| 4 | Campo `subsidioSalud` es String no Boolean | ✅ Resuelto | Cambiado valores booleanos a String/null |
+| #   | Descripción                                                | Estado      | Solución                                                  |
+| --- | ---------------------------------------------------------- | ----------- | --------------------------------------------------------- |
+| 1   | Campo `jerarquia` obligatorio en schema pero falta en seed | ✅ Resuelto | Agregado campo `jerarquia` (String) a todos los registros |
+| 2   | Campo `armaTipo`/`nroArma` no existe en schema             | ✅ Resuelto | Cambiado a `arma`/`numeroArma` según schema               |
+| 3   | Variable `secciones` duplicada en seed.js                  | ✅ Resuelto | Renombrado a `seccionesDb`                                |
+| 4   | Campo `subsidioSalud` es String no Boolean                 | ✅ Resuelto | Cambiado valores booleanos a String/null                  |
 
 ---
 

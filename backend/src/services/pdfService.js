@@ -305,16 +305,14 @@ class PDFService {
 
   addFooter(doc) {
     const bottom = doc.page.height - 50;
-    doc
-      .fontSize(8)
-      .text(
-        `Generado el: ${format(new Date(), "dd 'de' MMMM 'de' yyyy, HH:mm", {
-          locale: es,
-        })}`,
-        50,
-        bottom,
-        { align: 'center' }
-      );
+    doc.fontSize(8).text(
+      `Generado el: ${format(new Date(), "dd 'de' MMMM 'de' yyyy, HH:mm", {
+        locale: es,
+      })}`,
+      50,
+      bottom,
+      { align: 'center' }
+    );
   }
 
   addField(doc, label, value) {
@@ -345,10 +343,14 @@ class PDFService {
           if (index > 0) doc.addPage();
 
           // Encabezado institucional
-          doc.fontSize(16).font('Helvetica-Bold')
+          doc
+            .fontSize(16)
+            .font('Helvetica-Bold')
             .text('POLICÍA BOLIVIANA', { align: 'center' })
             .fontSize(14)
-            .text('Departamento de Inteligencia Criminal D-2', { align: 'center' })
+            .text('Departamento de Inteligencia Criminal D-2', {
+              align: 'center',
+            })
             .fontSize(12)
             .text('PLANILLA DE PERSONAL', { align: 'center' })
             .moveDown(1);
@@ -357,9 +359,17 @@ class PDFService {
           let photoY = doc.y;
           if (personal.fotoUrl) {
             try {
-              const photoPath = path.join(__dirname, '../../uploads', personal.fotoUrl.replace('/uploads/', ''));
+              const photoPath = path.join(
+                __dirname,
+                '../../uploads',
+                personal.fotoUrl.replace('/uploads/', '')
+              );
               if (fs.existsSync(photoPath)) {
-                doc.image(photoPath, 450, photoY, { width: 100, height: 120, fit: [100, 120] });
+                doc.image(photoPath, 450, photoY, {
+                  width: 100,
+                  height: 120,
+                  fit: [100, 120],
+                });
               }
             } catch (err) {
               console.error('Error al cargar foto:', err);
@@ -375,7 +385,7 @@ class PDFService {
           // Columna izquierda
           doc.font('Helvetica-Bold').text('DATOS PERSONALES', leftX, y);
           y += 20;
-          
+
           this.addFieldCompact(doc, 'Apellidos:', personal.apellidos, leftX, y);
           y += 15;
           this.addFieldCompact(doc, 'Nombres:', personal.nombres, leftX, y);
@@ -384,62 +394,195 @@ class PDFService {
           y += 15;
           this.addFieldCompact(doc, 'CUIL:', personal.cuil || 'N/A', leftX, y);
           y += 15;
-          this.addFieldCompact(doc, 'Fecha Nac.:', this.formatDate(personal.fechaNacimiento), leftX, y);
+          this.addFieldCompact(
+            doc,
+            'Fecha Nac.:',
+            this.formatDate(personal.fechaNacimiento),
+            leftX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Sexo:', personal.sexo === 'M' ? 'Masculino' : 'Femenino', leftX, y);
+          this.addFieldCompact(
+            doc,
+            'Sexo:',
+            personal.sexo === 'M' ? 'Masculino' : 'Femenino',
+            leftX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Estado Civil:', personal.estadoCivil || 'N/A', leftX, y);
+          this.addFieldCompact(
+            doc,
+            'Estado Civil:',
+            personal.estadoCivil || 'N/A',
+            leftX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Profesión:', personal.profesion || 'N/A', leftX, y);
+          this.addFieldCompact(
+            doc,
+            'Profesión:',
+            personal.profesion || 'N/A',
+            leftX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Prontuario:', personal.prontuario || 'N/A', leftX, y);
-          
+          this.addFieldCompact(
+            doc,
+            'Prontuario:',
+            personal.prontuario || 'N/A',
+            leftX,
+            y
+          );
+
           y += 30;
           doc.font('Helvetica-Bold').text('CONTACTO', leftX, y);
           y += 20;
-          this.addFieldCompact(doc, 'Celular:', personal.celular || 'N/A', leftX, y);
+          this.addFieldCompact(
+            doc,
+            'Celular:',
+            personal.celular || 'N/A',
+            leftX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Email:', personal.email || 'N/A', leftX, y);
+          this.addFieldCompact(
+            doc,
+            'Email:',
+            personal.email || 'N/A',
+            leftX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Domicilio:', personal.domicilio || 'N/A', leftX, y);
+          this.addFieldCompact(
+            doc,
+            'Domicilio:',
+            personal.domicilio || 'N/A',
+            leftX,
+            y
+          );
 
           // Columna derecha
           y = photoY + 140;
           doc.font('Helvetica-Bold').text('DATOS LABORALES', rightX, y);
           y += 20;
-          this.addFieldCompact(doc, 'N° Asignación:', personal.numeroAsignacion || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'N° Asignación:',
+            personal.numeroAsignacion || 'N/A',
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Tipo Personal:', personal.tipoPersonal, rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Tipo Personal:',
+            personal.tipoPersonal,
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Jerarquía:', personal.jerarquia?.nombre || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Jerarquía:',
+            personal.jerarquia?.nombre || 'N/A',
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'N° Cargo:', personal.numeroCargo || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'N° Cargo:',
+            personal.numeroCargo || 'N/A',
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Sección:', personal.seccion?.nombre || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Sección:',
+            personal.seccion?.nombre || 'N/A',
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Función Depto:', personal.funcionDepto || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Función Depto:',
+            personal.funcionDepto || 'N/A',
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Horario:', personal.horarioLaboral || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Horario:',
+            personal.horarioLaboral || 'N/A',
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Alta Depend.:', this.formatDate(personal.altaDependencia), rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Alta Depend.:',
+            this.formatDate(personal.altaDependencia),
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Jurisdicción:', personal.jurisdiccion || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Jurisdicción:',
+            personal.jurisdiccion || 'N/A',
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Regional:', personal.regional || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Regional:',
+            personal.regional || 'N/A',
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'Subsidio Salud:', personal.subsidioSalud || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Subsidio Salud:',
+            personal.subsidioSalud || 'N/A',
+            rightX,
+            y
+          );
 
           y += 30;
           doc.font('Helvetica-Bold').text('ARMAMENTO', rightX, y);
           y += 20;
-          this.addFieldCompact(doc, 'Tipo Arma:', personal.armaTipo || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'Tipo Arma:',
+            personal.armaTipo || 'N/A',
+            rightX,
+            y
+          );
           y += 15;
-          this.addFieldCompact(doc, 'N° Arma:', personal.nroArma || 'N/A', rightX, y);
+          this.addFieldCompact(
+            doc,
+            'N° Arma:',
+            personal.nroArma || 'N/A',
+            rightX,
+            y
+          );
 
           // Pie de página
-          doc.fontSize(8)
-            .text(`Generado: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: es })}`,
-              50, doc.page.height - 40, { align: 'center' });
+          doc
+            .fontSize(8)
+            .text(
+              `Generado: ${format(new Date(), 'dd/MM/yyyy HH:mm', {
+                locale: es,
+              })}`,
+              50,
+              doc.page.height - 40,
+              { align: 'center' }
+            );
         });
 
         doc.end();
@@ -456,7 +599,10 @@ class PDFService {
   }
 
   addFieldCompact(doc, label, value, x, y) {
-    doc.font('Helvetica-Bold').fontSize(9).text(label, x, y, { continued: true, width: 100 });
+    doc
+      .font('Helvetica-Bold')
+      .fontSize(9)
+      .text(label, x, y, { continued: true, width: 100 });
     doc.font('Helvetica').text(` ${value}`, { width: 200 });
   }
 

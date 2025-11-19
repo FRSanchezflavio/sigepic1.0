@@ -132,17 +132,25 @@ async function main() {
   const seccionesDb = await prisma.seccion.findMany();
 
   // Obtener IDs específicos
-  const comisarioGeneral = jerarquias.find(j => j.nombre === 'Comisario General');
+  const comisarioGeneral = jerarquias.find(
+    j => j.nombre === 'Comisario General'
+  );
   const comisarioMayor = jerarquias.find(j => j.nombre === 'Comisario Mayor');
   const comisario = jerarquias.find(j => j.nombre === 'Comisario');
   const sargento = jerarquias.find(j => j.nombre === 'Sargento');
   const cabo = jerarquias.find(j => j.nombre === 'Cabo');
   const agente = jerarquias.find(j => j.nombre === 'Agente');
 
-  const analisisCriminal = seccionesDb.find(s => s.nombre === 'Análisis Criminal');
-  const inteligencia = seccionesDb.find(s => s.nombre === 'Inteligencia Operativa');
+  const analisisCriminal = seccionesDb.find(
+    s => s.nombre === 'Análisis Criminal'
+  );
+  const inteligencia = seccionesDb.find(
+    s => s.nombre === 'Inteligencia Operativa'
+  );
   const investigaciones = seccionesDb.find(s => s.nombre === 'Investigaciones');
-  const tecnologia = seccionesDb.find(s => s.nombre === 'Tecnología y Comunicaciones');
+  const tecnologia = seccionesDb.find(
+    s => s.nombre === 'Tecnología y Comunicaciones'
+  );
   const administrativo = seccionesDb.find(s => s.nombre === 'Administrativo');
 
   const personalData = [

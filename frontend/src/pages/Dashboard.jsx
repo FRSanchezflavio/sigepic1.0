@@ -2,7 +2,13 @@ import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { UserPlus, Search, UserCog, LogOut, Shield } from 'lucide-react';
 
 export default function Dashboard() {
@@ -117,7 +123,8 @@ export default function Dashboard() {
             Bienvenido, {user?.nombreCompleto || user?.username}
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Sistema de Gestión del Personal del Departamento de Inteligencia Criminal D-2
+            Sistema de Gestión del Personal del Departamento de Inteligencia
+            Criminal D-2
           </p>
         </motion.div>
 
@@ -190,7 +197,8 @@ export default function Dashboard() {
           transition={{ delay: 0.8 }}
         >
           <p className="text-sm text-slate-500">
-            Selecciona una opción para comenzar a gestionar el personal del departamento
+            Selecciona una opción para comenzar a gestionar el personal del
+            departamento
           </p>
         </motion.div>
       </main>

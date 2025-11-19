@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Download, ArrowLeft, Filter, X, FileDown, Users } from 'lucide-react';
+import {
+  Search,
+  Download,
+  ArrowLeft,
+  Filter,
+  X,
+  FileDown,
+  Users,
+} from 'lucide-react';
 import { personalService } from '../services/personal.service';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '../components/ui/card';
 import { Table } from '../components/ui/table';
 import { Badge } from '../components/ui/badge';
 import Loading from '../components/common/Loading';
@@ -20,7 +34,7 @@ const PersonalSearch = () => {
   const [jerarquias, setJerarquias] = useState([]);
   const [secciones, setSecciones] = useState([]);
   const [showFilters, setShowFilters] = useState(true);
-  
+
   const [filtros, setFiltros] = useState({
     search: '',
     tipoPersonal: '',
@@ -38,8 +52,8 @@ const PersonalSearch = () => {
   const fetchOptions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const headers = { 'Authorization': `Bearer ${token}` };
-      
+      const headers = { Authorization: `Bearer ${token}` };
+
       const [jerarquiasRes, seccionesRes] = await Promise.all([
         fetch('/api/jerarquias', { headers }),
         fetch('/api/secciones', { headers }),
@@ -62,7 +76,7 @@ const PersonalSearch = () => {
       Object.keys(filtros).forEach(key => {
         if (filtros[key]) params.append(key, filtros[key]);
       });
-      
+
       const response = await personalService.buscar(params.toString());
       setResultados(response.data.data || []);
       setSeleccionados([]);
@@ -87,7 +101,7 @@ const PersonalSearch = () => {
     setSeleccionados([]);
   };
 
-  const handleToggleSeleccion = (id) => {
+  const handleToggleSeleccion = id => {
     setSeleccionados(prev =>
       prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
     );
@@ -113,7 +127,7 @@ const PersonalSearch = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({ ids: seleccionados }),
       });
@@ -137,7 +151,7 @@ const PersonalSearch = () => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setFiltros({ ...filtros, [e.target.name]: e.target.value });
   };
 
@@ -315,7 +329,11 @@ const PersonalSearch = () => {
               </div>
 
               <div className="flex gap-3">
-                <Button onClick={handleBuscar} disabled={searching} className="flex-1">
+                <Button
+                  onClick={handleBuscar}
+                  disabled={searching}
+                  className="flex-1"
+                >
                   {searching ? (
                     <>
                       <span className="animate-spin mr-2">⏳</span>
@@ -346,8 +364,14 @@ const PersonalSearch = () => {
                   <Users className="w-5 h-5 text-purple-600" />
                   <CardTitle>Resultados ({resultados.length})</CardTitle>
                 </div>
-                <Button variant="outline" size="sm" onClick={handleSeleccionarTodos}>
-                  {seleccionados.length === resultados.length ? 'Deseleccionar todos' : 'Seleccionar todos'}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSeleccionarTodos}
+                >
+                  {seleccionados.length === resultados.length
+                    ? 'Deseleccionar todos'
+                    : 'Seleccionar todos'}
                 </Button>
               </div>
             </CardHeader>
@@ -359,7 +383,10 @@ const PersonalSearch = () => {
                       <th className="text-left p-3">
                         <input
                           type="checkbox"
-                          checked={seleccionados.length === resultados.length && resultados.length > 0}
+                          checked={
+                            seleccionados.length === resultados.length &&
+                            resultados.length > 0
+                          }
                           onChange={handleSeleccionarTodos}
                           className="w-4 h-4"
                         />
@@ -376,7 +403,10 @@ const PersonalSearch = () => {
                   </thead>
                   <tbody>
                     {resultados.map(personal => (
-                      <tr key={personal.id} className="border-b hover:bg-slate-50">
+                      <tr
+                        key={personal.id}
+                        className="border-b hover:bg-slate-50"
+                      >
                         <td className="p-3">
                           <input
                             type="checkbox"
@@ -388,7 +418,11 @@ const PersonalSearch = () => {
                         <td className="p-3">
                           <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
                             {personal.fotoUrl ? (
-                              <img src={personal.fotoUrl} alt="" className="w-full h-full object-cover" />
+                              <img
+                                src={personal.fotoUrl}
+                                alt=""
+                                className="w-full h-full object-cover"
+                              />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-slate-400">
                                 <Users className="w-5 h-5" />
@@ -400,14 +434,26 @@ const PersonalSearch = () => {
                           {personal.apellidos}, {personal.nombres}
                         </td>
                         <td className="p-3">{personal.dni}</td>
-                        <td className="p-3">{personal.numeroAsignacion || '-'}</td>
                         <td className="p-3">
-                          <Badge variant={personal.tipoPersonal === 'SUPERIOR' ? 'default' : 'secondary'}>
+                          {personal.numeroAsignacion || '-'}
+                        </td>
+                        <td className="p-3">
+                          <Badge
+                            variant={
+                              personal.tipoPersonal === 'SUPERIOR'
+                                ? 'default'
+                                : 'secondary'
+                            }
+                          >
                             {personal.tipoPersonal}
                           </Badge>
                         </td>
-                        <td className="p-3">{personal.jerarquia?.nombre || '-'}</td>
-                        <td className="p-3">{personal.seccion?.nombre || '-'}</td>
+                        <td className="p-3">
+                          {personal.jerarquia?.nombre || '-'}
+                        </td>
+                        <td className="p-3">
+                          {personal.seccion?.nombre || '-'}
+                        </td>
                         <td className="p-3">
                           <Badge
                             variant={
