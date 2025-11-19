@@ -171,14 +171,20 @@ const PersonalNew = () => {
       // Convertir y agregar datos al FormData
       Object.keys(data).forEach(key => {
         const value = data[key];
-        
+
         // Saltar valores vacíos excepto booleanos y números
         if (value === null || value === undefined || value === '') {
           return;
         }
 
         // Convertir "SI"/"NO" a boolean para campos específicos
-        if (['poseeCarnetManejo', 'poseeCredencialPolicial', 'poseeChalecoAsignado'].includes(key)) {
+        if (
+          [
+            'poseeCarnetManejo',
+            'poseeCredencialPolicial',
+            'poseeChalecoAsignado',
+          ].includes(key)
+        ) {
           formData.append(key, value === 'SI' ? 'true' : 'false');
         }
         // Convertir booleanos a strings para FormData
@@ -208,10 +214,11 @@ const PersonalNew = () => {
       navigate('/personal');
     } catch (err) {
       console.error('Error completo:', err);
-      const errorMessage = err.response?.data?.message 
-        || err.response?.data?.error 
-        || err.message 
-        || 'Error al crear el personal';
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        'Error al crear el personal';
       setError(errorMessage);
     } finally {
       setLoading(false);

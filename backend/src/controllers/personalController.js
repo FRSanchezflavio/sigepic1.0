@@ -116,14 +116,14 @@ const crear = async (req, res, next) => {
 
     // Convertir valores booleanos desde FormData (vienen como strings)
     const booleanFields = [
-      'conduceAutos', 
-      'conduceMotos', 
-      'conduceOtros', 
-      'poseeCarnetManejo', 
-      'poseeCredencialPolicial', 
-      'poseeChalecoAsignado'
+      'conduceAutos',
+      'conduceMotos',
+      'conduceOtros',
+      'poseeCarnetManejo',
+      'poseeCredencialPolicial',
+      'poseeChalecoAsignado',
     ];
-    
+
     booleanFields.forEach(field => {
       if (datos[field] !== undefined) {
         datos[field] = datos[field] === 'true' || datos[field] === true;
@@ -159,7 +159,11 @@ const crear = async (req, res, next) => {
 
     // Limpiar campos vacíos o null (excepto booleanos que pueden ser false)
     Object.keys(datos).forEach(key => {
-      if (datos[key] === '' || datos[key] === 'null' || datos[key] === 'undefined') {
+      if (
+        datos[key] === '' ||
+        datos[key] === 'null' ||
+        datos[key] === 'undefined'
+      ) {
         delete datos[key];
       }
     });
