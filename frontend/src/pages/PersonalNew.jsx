@@ -5,12 +5,29 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useDropzone } from 'react-dropzone';
 import { motion } from 'framer-motion';
-import { Plus, Upload, X, ArrowLeft, User, Briefcase, FileText, Phone, Shield, Camera } from 'lucide-react';
+import {
+  Plus,
+  Upload,
+  X,
+  ArrowLeft,
+  User,
+  Briefcase,
+  FileText,
+  Phone,
+  Shield,
+  Camera,
+} from 'lucide-react';
 import { personalService } from '../services/personal.service';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '../components/ui/card';
 import { DatePicker } from '../components/ui/date-picker';
 import Loading from '../components/common/Loading';
 
@@ -33,7 +50,9 @@ const personalSchema = z.object({
   subsidioSalud: z.string().optional(),
   fechaNacimiento: z.date({ required_error: 'Fecha de nacimiento requerida' }),
   prontuario: z.string().optional(),
-  estadoCivil: z.enum(['SOLTERO', 'CASADO', 'DIVORCIADO', 'VIUDO', 'CONCUBINO']).optional(),
+  estadoCivil: z
+    .enum(['SOLTERO', 'CASADO', 'DIVORCIADO', 'VIUDO', 'CONCUBINO'])
+    .optional(),
   sexo: z.enum(['M', 'F']),
   email: z.string().email('Email inválido').optional().or(z.literal('')),
   domicilio: z.string().optional(),
@@ -71,19 +90,26 @@ const PersonalNew = () => {
   const tipoPersonal = watch('tipoPersonal');
 
   // Dropzone para foto
-  const {getRootProps: getFotoRootProps, getInputProps: getFotoInputProps} = useDropzone({
-    accept: { 'image/*': ['.png', '.jpg', '.jpeg'] },
-    maxFiles: 1,
-    onDrop: acceptedFiles => {
-      const file = acceptedFiles[0];
-      setFoto(file);
-      setFotoPreview(URL.createObjectURL(file));
-    },
-  });
+  const { getRootProps: getFotoRootProps, getInputProps: getFotoInputProps } =
+    useDropzone({
+      accept: { 'image/*': ['.png', '.jpg', '.jpeg'] },
+      maxFiles: 1,
+      onDrop: acceptedFiles => {
+        const file = acceptedFiles[0];
+        setFoto(file);
+        setFotoPreview(URL.createObjectURL(file));
+      },
+    });
 
   // Dropzone para archivos adjuntos
-  const {getRootProps: getArchivosRootProps, getInputProps: getArchivosInputProps} = useDropzone({
-    accept: { 'application/pdf': ['.pdf'], 'image/*': ['.png', '.jpg', '.jpeg'] },
+  const {
+    getRootProps: getArchivosRootProps,
+    getInputProps: getArchivosInputProps,
+  } = useDropzone({
+    accept: {
+      'application/pdf': ['.pdf'],
+      'image/*': ['.png', '.jpg', '.jpeg'],
+    },
     onDrop: acceptedFiles => {
       setArchivos(prev => [...prev, ...acceptedFiles]);
     },
@@ -97,8 +123,8 @@ const PersonalNew = () => {
     try {
       // Usar authService en lugar de fetch directo
       const token = localStorage.getItem('token');
-      const headers = { 'Authorization': `Bearer ${token}` };
-      
+      const headers = { Authorization: `Bearer ${token}` };
+
       const [jerarquiasRes, seccionesRes] = await Promise.all([
         fetch('/api/jerarquias', { headers }),
         fetch('/api/secciones', { headers }),
@@ -114,18 +140,22 @@ const PersonalNew = () => {
     }
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     setLoading(true);
     setError('');
 
     try {
       const formData = new FormData();
-      
+
       // Convertir datos
       Object.keys(data).forEach(key => {
         if (data[key] instanceof Date) {
           formData.append(key, data[key].toISOString());
-        } else if (data[key] !== null && data[key] !== undefined && data[key] !== '') {
+        } else if (
+          data[key] !== null &&
+          data[key] !== undefined &&
+          data[key] !== ''
+        ) {
           formData.append(key, data[key]);
         }
       });
@@ -178,7 +208,8 @@ const PersonalNew = () => {
             Agregar Personal
           </h1>
           <p className="text-slate-600 mt-2">
-            Complete todos los campos requeridos para registrar nuevo personal del Departamento D-2
+            Complete todos los campos requeridos para registrar nuevo personal
+            del Departamento D-2
           </p>
         </motion.div>
 
@@ -200,25 +231,38 @@ const PersonalNew = () => {
                 <Camera className="w-5 h-5 text-police-navy" />
                 <CardTitle>Fotografía</CardTitle>
               </div>
-              <CardDescription>Agregue una foto del personal (opcional)</CardDescription>
+              <CardDescription>
+                Agregue una foto del personal (opcional)
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-8">
                 {/* Preview */}
                 <div className="w-32 h-32 rounded-full bg-slate-100 border-4 border-slate-200 overflow-hidden flex items-center justify-center">
                   {fotoPreview ? (
-                    <img src={fotoPreview} alt="Preview" className="w-full h-full object-cover" />
+                    <img
+                      src={fotoPreview}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <User className="w-16 h-16 text-slate-400" />
                   )}
                 </div>
 
                 {/* Upload */}
-                <div {...getFotoRootProps()} className="flex-1 border-2 border-dashed border-slate-300 rounded-lg p-6 text-center cursor-pointer hover:border-police-cyan hover:bg-police-cyan/5 transition-colors">
+                <div
+                  {...getFotoRootProps()}
+                  className="flex-1 border-2 border-dashed border-slate-300 rounded-lg p-6 text-center cursor-pointer hover:border-police-cyan hover:bg-police-cyan/5 transition-colors"
+                >
                   <input {...getFotoInputProps()} />
                   <Upload className="w-8 h-8 mx-auto text-slate-400 mb-2" />
-                  <p className="text-sm text-slate-600">Click para seleccionar o arrastre una foto</p>
-                  <p className="text-xs text-slate-400 mt-1">PNG, JPG (máx. 5MB)</p>
+                  <p className="text-sm text-slate-600">
+                    Click para seleccionar o arrastre una foto
+                  </p>
+                  <p className="text-xs text-slate-400 mt-1">
+                    PNG, JPG (máx. 5MB)
+                  </p>
                 </div>
 
                 {foto && (
@@ -245,7 +289,9 @@ const PersonalNew = () => {
                 <User className="w-5 h-5 text-police-navy" />
                 <CardTitle>Datos Personales</CardTitle>
               </div>
-              <CardDescription>Información personal básica del efectivo</CardDescription>
+              <CardDescription>
+                Información personal básica del efectivo
+              </CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
@@ -256,7 +302,9 @@ const PersonalNew = () => {
                   className={errors.apellidos ? 'border-red-500' : ''}
                 />
                 {errors.apellidos && (
-                  <p className="text-xs text-red-500 mt-1">{errors.apellidos.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.apellidos.message}
+                  </p>
                 )}
               </div>
 
@@ -268,7 +316,9 @@ const PersonalNew = () => {
                   className={errors.nombres ? 'border-red-500' : ''}
                 />
                 {errors.nombres && (
-                  <p className="text-xs text-red-500 mt-1">{errors.nombres.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.nombres.message}
+                  </p>
                 )}
               </div>
 
@@ -281,13 +331,19 @@ const PersonalNew = () => {
                   className={errors.dni ? 'border-red-500' : ''}
                 />
                 {errors.dni && (
-                  <p className="text-xs text-red-500 mt-1">{errors.dni.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.dni.message}
+                  </p>
                 )}
               </div>
 
               <div>
                 <Label htmlFor="cuil">CUIL</Label>
-                <Input id="cuil" {...register('cuil')} placeholder="Ej: 20-12345678-9" />
+                <Input
+                  id="cuil"
+                  {...register('cuil')}
+                  placeholder="Ej: 20-12345678-9"
+                />
               </div>
 
               <div>
@@ -316,7 +372,9 @@ const PersonalNew = () => {
                   )}
                 />
                 {errors.fechaNacimiento && (
-                  <p className="text-xs text-red-500 mt-1">{errors.fechaNacimiento.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.fechaNacimiento.message}
+                  </p>
                 )}
               </div>
 
@@ -347,7 +405,11 @@ const PersonalNew = () => {
 
               <div className="lg:col-span-3">
                 <Label htmlFor="domicilio">Domicilio</Label>
-                <Input id="domicilio" {...register('domicilio')} placeholder="Calle, número, localidad" />
+                <Input
+                  id="domicilio"
+                  {...register('domicilio')}
+                  placeholder="Calle, número, localidad"
+                />
               </div>
             </CardContent>
           </Card>
@@ -359,12 +421,18 @@ const PersonalNew = () => {
                 <Briefcase className="w-5 h-5 text-police-navy" />
                 <CardTitle>Datos Laborales</CardTitle>
               </div>
-              <CardDescription>Información del cargo y dependencia</CardDescription>
+              <CardDescription>
+                Información del cargo y dependencia
+              </CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="numeroAsignacion">N° de Asignación</Label>
-                <Input id="numeroAsignacion" {...register('numeroAsignacion')} placeholder="Ej: A-12345" />
+                <Input
+                  id="numeroAsignacion"
+                  {...register('numeroAsignacion')}
+                  placeholder="Ej: A-12345"
+                />
               </div>
 
               <div>
@@ -384,7 +452,9 @@ const PersonalNew = () => {
                 <select
                   id="jerarquiaId"
                   {...register('jerarquiaId')}
-                  className={`w-full px-3 py-2 border rounded-md bg-background ${errors.jerarquiaId ? 'border-red-500' : ''}`}
+                  className={`w-full px-3 py-2 border rounded-md bg-background ${
+                    errors.jerarquiaId ? 'border-red-500' : ''
+                  }`}
                 >
                   <option value="">Seleccionar...</option>
                   {jerarquiasFiltradas.map(j => (
@@ -394,13 +464,19 @@ const PersonalNew = () => {
                   ))}
                 </select>
                 {errors.jerarquiaId && (
-                  <p className="text-xs text-red-500 mt-1">{errors.jerarquiaId.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.jerarquiaId.message}
+                  </p>
                 )}
               </div>
 
               <div>
                 <Label htmlFor="numeroCargo">N° de Cargo</Label>
-                <Input id="numeroCargo" {...register('numeroCargo')} placeholder="Número de cargo" />
+                <Input
+                  id="numeroCargo"
+                  {...register('numeroCargo')}
+                  placeholder="Número de cargo"
+                />
               </div>
 
               <div>
@@ -408,7 +484,9 @@ const PersonalNew = () => {
                 <select
                   id="seccionId"
                   {...register('seccionId')}
-                  className={`w-full px-3 py-2 border rounded-md bg-background ${errors.seccionId ? 'border-red-500' : ''}`}
+                  className={`w-full px-3 py-2 border rounded-md bg-background ${
+                    errors.seccionId ? 'border-red-500' : ''
+                  }`}
                 >
                   <option value="">Seleccionar...</option>
                   {secciones.map(s => (
@@ -418,7 +496,9 @@ const PersonalNew = () => {
                   ))}
                 </select>
                 {errors.seccionId && (
-                  <p className="text-xs text-red-500 mt-1">{errors.seccionId.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.seccionId.message}
+                  </p>
                 )}
               </div>
 
@@ -429,7 +509,11 @@ const PersonalNew = () => {
 
               <div>
                 <Label htmlFor="horarioLaboral">Horario Laboral</Label>
-                <Input id="horarioLaboral" {...register('horarioLaboral')} placeholder="Ej: 08:00 - 16:00" />
+                <Input
+                  id="horarioLaboral"
+                  {...register('horarioLaboral')}
+                  placeholder="Ej: 08:00 - 16:00"
+                />
               </div>
 
               <div>
@@ -475,7 +559,11 @@ const PersonalNew = () => {
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="celular">Celular</Label>
-                <Input id="celular" {...register('celular')} placeholder="Ej: +549 11 1234-5678" />
+                <Input
+                  id="celular"
+                  {...register('celular')}
+                  placeholder="Ej: +549 11 1234-5678"
+                />
               </div>
 
               <div>
@@ -488,7 +576,9 @@ const PersonalNew = () => {
                   className={errors.email ? 'border-red-500' : ''}
                 />
                 {errors.email && (
-                  <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
             </CardContent>
@@ -501,17 +591,27 @@ const PersonalNew = () => {
                 <Shield className="w-5 h-5 text-police-navy" />
                 <CardTitle>Armamento Asignado</CardTitle>
               </div>
-              <CardDescription>Información sobre el armamento asignado (opcional)</CardDescription>
+              <CardDescription>
+                Información sobre el armamento asignado (opcional)
+              </CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="armaTipo">Tipo de Arma</Label>
-                <Input id="armaTipo" {...register('armaTipo')} placeholder="Ej: Pistola 9mm" />
+                <Input
+                  id="armaTipo"
+                  {...register('armaTipo')}
+                  placeholder="Ej: Pistola 9mm"
+                />
               </div>
 
               <div>
                 <Label htmlFor="nroArma">N° de Arma</Label>
-                <Input id="nroArma" {...register('nroArma')} placeholder="Número de serie" />
+                <Input
+                  id="nroArma"
+                  {...register('nroArma')}
+                  placeholder="Número de serie"
+                />
               </div>
             </CardContent>
           </Card>
@@ -523,27 +623,47 @@ const PersonalNew = () => {
                 <FileText className="w-5 h-5 text-police-navy" />
                 <CardTitle>Archivos Adjuntos</CardTitle>
               </div>
-              <CardDescription>Agregue documentos relacionados (opcional)</CardDescription>
+              <CardDescription>
+                Agregue documentos relacionados (opcional)
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div {...getArchivosRootProps()} className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center cursor-pointer hover:border-police-cyan hover:bg-police-cyan/5 transition-colors">
+              <div
+                {...getArchivosRootProps()}
+                className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center cursor-pointer hover:border-police-cyan hover:bg-police-cyan/5 transition-colors"
+              >
                 <input {...getArchivosInputProps()} />
                 <Upload className="w-12 h-12 mx-auto text-slate-400 mb-3" />
-                <p className="text-sm text-slate-600 mb-1">Click para seleccionar o arrastre archivos aquí</p>
-                <p className="text-xs text-slate-400">PDF, PNG, JPG (máx. 10MB cada uno)</p>
+                <p className="text-sm text-slate-600 mb-1">
+                  Click para seleccionar o arrastre archivos aquí
+                </p>
+                <p className="text-xs text-slate-400">
+                  PDF, PNG, JPG (máx. 10MB cada uno)
+                </p>
               </div>
 
               {archivos.length > 0 && (
                 <div className="mt-4 space-y-2">
-                  <p className="text-sm font-medium text-slate-700">Archivos seleccionados:</p>
+                  <p className="text-sm font-medium text-slate-700">
+                    Archivos seleccionados:
+                  </p>
                   {archivos.map((archivo, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-slate-50 rounded-md">
-                      <span className="text-sm text-slate-600">{archivo.name}</span>
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-2 bg-slate-50 rounded-md"
+                    >
+                      <span className="text-sm text-slate-600">
+                        {archivo.name}
+                      </span>
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => setArchivos(prev => prev.filter((_, i) => i !== index))}
+                        onClick={() =>
+                          setArchivos(prev =>
+                            prev.filter((_, i) => i !== index)
+                          )
+                        }
                       >
                         <X className="w-4 h-4" />
                       </Button>
