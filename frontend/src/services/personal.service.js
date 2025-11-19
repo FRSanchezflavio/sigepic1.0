@@ -1,0 +1,43 @@
+import api from './api';
+
+export const personalService = {
+  buscar: async params => {
+    return await api.get('/personal', { params });
+  },
+
+  obtenerPorId: async id => {
+    return await api.get(`/personal/${id}`);
+  },
+
+  crear: async datos => {
+    return await api.post('/personal', datos);
+  },
+
+  actualizar: async (id, datos) => {
+    return await api.put(`/personal/${id}`, datos);
+  },
+
+  eliminar: async id => {
+    return await api.delete(`/personal/${id}`);
+  },
+
+  estadisticas: async () => {
+    return await api.get('/personal/estadisticas');
+  },
+
+  subirFoto: async (id, formData) => {
+    return await api.post(`/personal/${id}/foto`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+
+  subirArchivos: async (id, formData) => {
+    return await api.post(`/personal/${id}/archivos`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+
+  obtenerHistorial: async id => {
+    return await api.get(`/personal/${id}/historial`);
+  },
+};

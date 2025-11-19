@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-15-alpine}
+    container_name: sigepic_postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-sigepic_db}
+      POSTGRES_USER: ${DB_USER:-sigepic_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-SecurePassword123!}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - '${DB_PORT:-5432}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sigepic_network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-sigepic_user}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Backend (Node.js + Express)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sigepic_backend
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: postgresql://${DB_USER:-sigepic_user}:${DB_PASSWORD:-SecurePassword123!}@postgres:5432/${DB_NAME:-sigepic_db}
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+    ports:
+      - '${BACKEND_PORT:-3000}:3000'
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - ./backend/logs:/app/logs
+      - ./backups:/app/backups
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - sigepic_network
+    restart: unless-stopped
+
+  # Frontend (React + Vite)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3000/api}
+    container_name: sigepic_frontend
+    ports:
+      - '${FRONTEND_PORT:-80}:80'
+    depends_on:
+      - backend
+    networks:
+      - sigepic_network
+    restart: unless-stopped
+
+networks:
+  sigepic_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
