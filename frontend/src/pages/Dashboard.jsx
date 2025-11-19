@@ -66,66 +66,133 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/20 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/20 to-slate-100 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-20 left-10 w-72 h-72 bg-police-cyan/5 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-96 h-96 bg-police-navy/5 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      </div>
+
       {/* Header */}
       <motion.header
-        className="bg-white/80 backdrop-blur-lg border-b border-slate-200 shadow-sm sticky top-0 z-50"
+        className="bg-white/90 backdrop-blur-xl border-b border-slate-200/50 shadow-lg sticky top-0 z-50 relative"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-police-navy to-police-navy-dark rounded-xl flex items-center justify-center shadow-lg border-2 border-police-cyan/40">
-                <Shield className="h-7 w-7 text-white" strokeWidth={2} />
-              </div>
+            <motion.div 
+              className="flex items-center gap-4"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <motion.div 
+                className="relative w-14 h-14 bg-gradient-to-br from-police-navy via-police-navy-dark to-police-navy rounded-2xl flex items-center justify-center shadow-xl border-2 border-police-cyan/50"
+                whileHover={{ scale: 1.05, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <Shield className="h-8 w-8 text-white drop-shadow-lg" strokeWidth={2.5} />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-police-cyan rounded-full border-2 border-white shadow-lg animate-pulse" />
+              </motion.div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-police-navy to-police-cyan bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan bg-clip-text text-transparent tracking-tight">
                   SIGEPIC
                 </h1>
-                <p className="text-sm text-slate-600">
+                <p className="text-xs text-slate-500 font-medium">
                   Departamento de Inteligencia Criminal D-2
                 </p>
               </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-semibold text-slate-900">
+            </motion.div>
+            <motion.div 
+              className="flex items-center gap-4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="text-right hidden sm:block bg-slate-50/80 px-4 py-2 rounded-xl border border-slate-200/60">
+                <p className="text-sm font-bold text-police-navy">
                   {user?.nombreCompleto || user?.username}
                 </p>
-                <p className="text-xs text-slate-500 capitalize">{user?.rol}</p>
+                <p className="text-xs text-police-cyan capitalize font-semibold">{user?.rol}</p>
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleLogout}
-                className="hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-colors"
+                className="hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all hover:shadow-lg"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Salir
               </Button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </motion.header>
 
       {/* Main Content */}
-      <main className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
         {/* Welcome Section */}
         <motion.div
-          className="mb-12 text-center"
+          className="mb-16 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <h2 className="text-4xl font-bold text-slate-900 mb-4">
-            Bienvenido, {user?.nombreCompleto || user?.username}
-          </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Sistema de Gestión del Personal del Departamento de Inteligencia
-            Criminal D-2
-          </p>
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: "spring" }}
+          >
+            <h2 className="text-5xl font-extrabold bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan bg-clip-text text-transparent mb-6 leading-tight">
+              Bienvenido, {user?.nombreCompleto || user?.username}
+            </h2>
+          </motion.div>
+          <motion.p 
+            className="text-xl text-slate-600 max-w-3xl mx-auto font-medium"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            Sistema de Gestión del Personal del Departamento de Inteligencia Criminal D-2
+          </motion.p>
+          <motion.div
+            className="mt-6 flex items-center justify-center gap-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            <div className="flex items-center gap-2 px-4 py-2 bg-police-cyan/10 border border-police-cyan/30 rounded-full">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-sm text-slate-700 font-semibold">Sistema Activo</span>
+            </div>
+            <div className="px-4 py-2 bg-white/80 border border-slate-200 rounded-full text-sm text-slate-600 font-medium shadow-sm">
+              {new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            </div>
+          </motion.div>
         </motion.div>
 
         {/* Menu Cards */}
@@ -138,51 +205,56 @@ export default function Dashboard() {
           {menuOptions.map((option, index) => {
             const Icon = option.icon;
             return (
-              <motion.div key={index} variants={item}>
+              <motion.div 
+                key={index} 
+                variants={item}
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.3 }}
+              >
                 <Card
-                  className="group cursor-pointer border-2 border-transparent hover:border-slate-200 transition-all duration-300 hover:shadow-2xl hover:scale-105 bg-white/80 backdrop-blur-sm overflow-hidden relative h-[280px] flex flex-col"
+                  className="group cursor-pointer border-2 border-slate-200/60 hover:border-police-cyan/60 transition-all duration-300 hover:shadow-2xl bg-white/90 backdrop-blur-lg overflow-hidden relative h-[280px] flex flex-col"
                   onClick={() => navigate(option.path)}
                 >
-                  {/* Gradient background on hover */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${option.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                  />
-
-                  <CardHeader className="relative z-10 pb-4 flex-grow">
-                    <div
-                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${option.gradient} flex items-center justify-center mb-4 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300`}
+                  {/* Card Header with Icon */}
+                  <div className={`bg-gradient-to-br ${option.gradient} p-6 relative overflow-hidden`}>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl transform translate-x-8 -translate-y-8" />
+                    <motion.div
+                      className="relative z-10"
+                      whileHover={{ scale: 1.08, rotate: 3 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     >
-                      <Icon className="w-8 h-8 text-white" strokeWidth={2} />
-                    </div>
-                    <CardTitle className="text-2xl font-bold text-slate-900 group-hover:text-slate-800">
-                      {option.title}
-                    </CardTitle>
-                    <CardDescription className="text-base text-slate-600 group-hover:text-slate-700 mt-2 line-clamp-2">
-                      {option.description}
-                    </CardDescription>
-                  </CardHeader>
+                      <Icon className="w-16 h-16 text-white drop-shadow-lg" strokeWidth={2.5} />
+                    </motion.div>
+                  </div>
 
-                  <CardContent className="relative z-10 mt-auto pb-6">
-                    <div className="flex items-center text-sm font-medium text-slate-500 group-hover:text-slate-700">
-                      <span>Ir a {option.title.toLowerCase()}</span>
-                      <svg
-                        className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
+                  {/* Card Content */}
+                  <div className="flex-1 p-6 flex flex-col justify-between relative z-10">
+                    <div>
+                      <CardTitle className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-police-cyan transition-colors duration-300">
+                        {option.title}
+                      </CardTitle>
+                      <CardDescription className="text-slate-600 leading-relaxed font-medium line-clamp-2">
+                        {option.description}
+                      </CardDescription>
                     </div>
-                  </CardContent>
 
-                  {/* Decorative corner */}
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    {/* Action Footer */}
+                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
+                      <span className="text-sm font-semibold text-police-cyan group-hover:translate-x-1 transition-transform duration-300 inline-block">
+                        Acceder →
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <div className="w-1.5 h-1.5 rounded-full bg-police-cyan/60 group-hover:bg-police-cyan transition-colors" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-police-cyan/40 group-hover:bg-police-cyan/80 transition-colors" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-police-cyan/20 group-hover:bg-police-cyan/60 transition-colors" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Hover Effect Gradient Overlay */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${option.bgGradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`}
+                  />
                 </Card>
               </motion.div>
             );
@@ -191,14 +263,27 @@ export default function Dashboard() {
 
         {/* Info Footer */}
         <motion.div
-          className="mt-16 text-center"
+          className="mt-20 text-center space-y-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          <p className="text-sm text-slate-500">
-            Selecciona una opción para comenzar a gestionar el personal del
-            departamento
+          <div className="flex items-center justify-center gap-8 flex-wrap">
+            <div className="flex items-center gap-2 px-5 py-2.5 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl shadow-sm">
+              <div className="w-2 h-2 bg-police-cyan rounded-full" />
+              <span className="text-sm font-semibold text-slate-700">Versión 1.0</span>
+            </div>
+            <div className="flex items-center gap-2 px-5 py-2.5 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl shadow-sm">
+              <svg className="w-4 h-4 text-police-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-sm font-semibold text-slate-700">
+                Último acceso: {new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+              </span>
+            </div>
+          </div>
+          <p className="text-sm text-slate-500 font-medium">
+            Selecciona una opción para comenzar a gestionar el personal del departamento
           </p>
         </motion.div>
       </main>
