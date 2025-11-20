@@ -6,8 +6,8 @@ const buscar = async (req, res, next) => {
     const {
       search = '',
       tipoPersonal,
-      jerarquiaId,
-      seccionId,
+      jerarquia,
+      seccion,
       estadoServicio,
       page = 1,
       limit = 20,
@@ -31,8 +31,8 @@ const buscar = async (req, res, next) => {
     }
 
     if (tipoPersonal) where.tipoPersonal = tipoPersonal;
-    if (jerarquiaId) where.jerarquiaId = jerarquiaId;
-    if (seccionId) where.seccionId = seccionId;
+    if (jerarquia) where.jerarquia = jerarquia;
+    if (seccion) where.seccion = seccion;
     if (estadoServicio) where.estadoServicio = estadoServicio;
 
     // Consultar

@@ -9,6 +9,11 @@ import {
   X,
   FileDown,
   Users,
+  Eye,
+  Edit,
+  SortAsc,
+  SortDesc,
+  ChevronRight,
 } from 'lucide-react';
 import { personalService } from '../services/personal.service';
 import { Button } from '../components/ui/button';
@@ -28,57 +33,87 @@ const PersonalSearch = () => {
   const [searching, setSearching] = useState(false);
   const [resultados, setResultados] = useState([]);
   const [seleccionados, setSeleccionados] = useState([]);
-  const [jerarquias, setJerarquias] = useState([]);
-  const [secciones, setSecciones] = useState([]);
   const [showFilters, setShowFilters] = useState(true);
+  const [sortField, setSortField] = useState('apellidos');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  // Jerarquías y secciones estáticas
+  const jerarquiasSuperiores = [
+    'Comisario General',
+    'Comisario Mayor',
+    'Comisario Inspector',
+    'Comisario Principal',
+    'Comisario',
+    'Subcomisario',
+    'Oficial Principal',
+    'Oficial Auxiliar',
+    'Oficial Ayudante',
+    'Oficial Subayudante',
+  ];
+
+  const jerarquiasSubalternas = [
+    'Suboficial Mayor',
+    'Suboficial Principal',
+    'Sargento Ayudante',
+    'Sargento 1°',
+    'Sargento',
+    'Cabo 1°',
+    'Cabo',
+    'Agente',
+    'PTP',
+  ];
+
+  const secciones = [
+    'Análisis Informática Forense',
+    'Cibercrimen',
+    'Investigaciones Especiales',
+    'Inteligencia Criminal',
+    'Operaciones Tácticas',
+    'Administración',
+  ];
 
   const [filtros, setFiltros] = useState({
     search: '',
     tipoPersonal: '',
-    jerarquiaId: '',
-    seccionId: '',
+    jerarquia: '',
+    seccion: '',
     estadoServicio: '',
     jurisdiccion: '',
     regional: '',
+    sexo: '',
+    estadoCivil: '',
+    grupoSanguineo: '',
   });
 
-  useEffect(() => {
-    fetchOptions();
-  }, []);
-
-  const fetchOptions = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const headers = { Authorization: `Bearer ${token}` };
-
-      const [jerarquiasRes, seccionesRes] = await Promise.all([
-        fetch('/api/jerarquias', { headers }),
-        fetch('/api/secciones', { headers }),
-      ]);
-
-      const jerarquiasData = await jerarquiasRes.json();
-      const seccionesData = await seccionesRes.json();
-
-      setJerarquias(jerarquiasData.data || []);
-      setSecciones(seccionesData.data || []);
-    } catch (err) {
-      console.error('Error al cargar opciones:', err);
-    }
-  };
-
-  const handleBuscar = async () => {
+  const handleBuscar = async (resetPage = true) => {
     setSearching(true);
     try {
-      const params = new URLSearchParams();
-      Object.keys(filtros).forEach(key => {
-        if (filtros[key]) params.append(key, filtros[key]);
+      const params = {
+        ...filtros,
+        page: resetPage ? 1 : page,
+        limit: 20,
+        sortBy: sortField,
+        sortOrder: sortOrder,
+      };
+
+      // Remover valores vacíos
+      Object.keys(params).forEach(key => {
+        if (!params[key]) delete params[key];
       });
 
-      const response = await personalService.buscar(params.toString());
+      const response = await personalService.buscar(params);
+
       setResultados(response.data.data || []);
+      setTotal(response.data.pagination?.total || 0);
+      setTotalPages(response.data.pagination?.totalPages || 0);
+      if (resetPage) setPage(1);
       setSeleccionados([]);
     } catch (error) {
       console.error('Error en búsqueda:', error);
+      setResultados([]);
     } finally {
       setSearching(false);
     }
@@ -88,14 +123,18 @@ const PersonalSearch = () => {
     setFiltros({
       search: '',
       tipoPersonal: '',
-      jerarquiaId: '',
-      seccionId: '',
+      jerarquia: '',
+      seccion: '',
       estadoServicio: '',
       jurisdiccion: '',
       regional: '',
+      sexo: '',
+      estadoCivil: '',
+      grupoSanguineo: '',
     });
     setResultados([]);
     setSeleccionados([]);
+    setPage(1);
   };
 
   const handleToggleSeleccion = id => {
@@ -109,6 +148,15 @@ const PersonalSearch = () => {
       setSeleccionados([]);
     } else {
       setSeleccionados(resultados.map(p => p.id));
+    }
+  };
+
+  const handleSort = field => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortOrder('asc');
     }
   };
 
@@ -152,350 +200,710 @@ const PersonalSearch = () => {
     setFiltros({ ...filtros, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    if (sortField || sortOrder) {
+      handleBuscar(false);
+    }
+  }, [sortField, sortOrder]);
+
   return (
-    <div className="min-h-screen bg-slate-100 p-6">
-      <div className="max-w-[1600px] mx-auto">
-        {/* Header Administrativo */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 p-6">
+      {/* Animated Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-300 pb-6"
-          initial={{ opacity: 0, y: -10 }}
+          className="absolute top-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute bottom-20 left-20 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.5, 0.3, 0.5],
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
+      </div>
+
+      <div className="max-w-[1800px] mx-auto relative z-10">
+        {/* Header */}
+        <motion.div
+          className="mb-8"
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => navigate('/dashboard')}
-                className="h-8 w-8 border-slate-300 hover:bg-slate-200"
-              >
-                <ArrowLeft className="w-4 h-4 text-slate-700" />
-              </Button>
-              <h1 className="text-2xl font-bold text-slate-900 uppercase tracking-tight">
-                Búsqueda de Personal
-              </h1>
-            </div>
-            <p className="text-sm text-slate-500 font-medium ml-11">
-              DEPARTAMENTO D-2 — SISTEMA DE GESTIÓN
-            </p>
-          </div>
-          
-          {seleccionados.length > 0 && (
-            <Button
-              onClick={handleDescargarPlanillas}
-              disabled={loading}
-              className="bg-slate-900 hover:bg-slate-800 text-white shadow-sm border border-transparent rounded-sm"
-            >
-              {loading ? (
-                <>
-                  <span className="animate-spin mr-2">⏳</span>
-                  Procesando...
-                </>
-              ) : (
-                <>
-                  <FileDown className="w-4 h-4 mr-2" />
-                  Exportar Selección ({seleccionados.length})
-                </>
-              )}
-            </Button>
-          )}
-        </motion.div>
-
-        {/* Panel de Filtros */}
-        <Card className="mb-6 border-slate-200 shadow-sm rounded-sm bg-white">
-          <CardHeader className="bg-slate-50 border-b border-slate-100 py-3 px-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-slate-600" />
-                <CardTitle className="text-sm font-bold text-slate-700 uppercase">Criterios de Búsqueda</CardTitle>
-              </div>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
-                size="sm"
-                onClick={() => setShowFilters(!showFilters)}
-                className="h-6 text-xs text-slate-500 hover:text-slate-900"
+                size="icon"
+                onClick={() => navigate('/dashboard')}
+                className="h-10 w-10 hover:bg-white/60"
               >
-                {showFilters ? 'OCULTAR' : 'MOSTRAR'}
+                <ArrowLeft className="w-5 h-5" />
               </Button>
-            </div>
-          </CardHeader>
-          {showFilters && (
-            <CardContent className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div className="space-y-1">
-                  <Label htmlFor="search" className="text-xs font-semibold text-slate-600 uppercase">Búsqueda General</Label>
-                  <div className="relative">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
-                    <Input
-                      id="search"
-                      name="search"
-                      value={filtros.search}
-                      onChange={handleChange}
-                      placeholder="Apellido, Nombre, DNI..."
-                      className="pl-9 border-slate-300 focus:border-slate-500 focus:ring-slate-500 rounded-sm"
-                    />
+              <div>
+                <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg">
+                    <Search className="w-6 h-6 text-white" />
                   </div>
-                </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="tipoPersonal" className="text-xs font-semibold text-slate-600 uppercase">Tipo de Personal</Label>
-                  <select
-                    id="tipoPersonal"
-                    name="tipoPersonal"
-                    value={filtros.tipoPersonal}
-                    onChange={handleChange}
-                    className="w-full h-10 px-3 py-2 border border-slate-300 rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
-                  >
-                    <option value="">TODOS</option>
-                    <option value="SUPERIOR">SUPERIOR</option>
-                    <option value="SUBALTERNO">SUBALTERNO</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="jerarquiaId" className="text-xs font-semibold text-slate-600 uppercase">Jerarquía</Label>
-                  <select
-                    id="jerarquiaId"
-                    name="jerarquiaId"
-                    value={filtros.jerarquiaId}
-                    onChange={handleChange}
-                    className="w-full h-10 px-3 py-2 border border-slate-300 rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
-                  >
-                    <option value="">TODAS</option>
-                    {jerarquias.map(j => (
-                      <option key={j.id} value={j.id}>
-                        {j.nombre}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="seccionId" className="text-xs font-semibold text-slate-600 uppercase">Sección</Label>
-                  <select
-                    id="seccionId"
-                    name="seccionId"
-                    value={filtros.seccionId}
-                    onChange={handleChange}
-                    className="w-full h-10 px-3 py-2 border border-slate-300 rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
-                  >
-                    <option value="">TODAS</option>
-                    {secciones.map(s => (
-                      <option key={s.id} value={s.id}>
-                        {s.nombre}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="estadoServicio" className="text-xs font-semibold text-slate-600 uppercase">Estado</Label>
-                  <select
-                    id="estadoServicio"
-                    name="estadoServicio"
-                    value={filtros.estadoServicio}
-                    onChange={handleChange}
-                    className="w-full h-10 px-3 py-2 border border-slate-300 rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
-                  >
-                    <option value="">TODOS</option>
-                    <option value="ACTIVO">ACTIVO</option>
-                    <option value="INACTIVO">INACTIVO</option>
-                    <option value="RETIRADO">RETIRADO</option>
-                    <option value="BAJA">BAJA</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="jurisdiccion" className="text-xs font-semibold text-slate-600 uppercase">Jurisdicción</Label>
-                  <Input
-                    id="jurisdiccion"
-                    name="jurisdiccion"
-                    value={filtros.jurisdiccion}
-                    onChange={handleChange}
-                    placeholder="Jurisdicción..."
-                    className="border-slate-300 focus:border-slate-500 focus:ring-slate-500 rounded-sm"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="regional" className="text-xs font-semibold text-slate-600 uppercase">Regional</Label>
-                  <Input
-                    id="regional"
-                    name="regional"
-                    value={filtros.regional}
-                    onChange={handleChange}
-                    placeholder="Regional..."
-                    className="border-slate-300 focus:border-slate-500 focus:ring-slate-500 rounded-sm"
-                  />
-                </div>
+                  Búsqueda Avanzada de Personal
+                </h1>
+                <p className="text-slate-600 mt-1">
+                  Sistema de consulta integral del padrón policial
+                </p>
               </div>
+            </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
-                <Button 
-                  variant="outline" 
-                  onClick={handleLimpiar}
-                  className="border-slate-300 text-slate-700 hover:bg-slate-50 rounded-sm"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Limpiar
-                </Button>
+            {seleccionados.length > 0 && (
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+              >
                 <Button
-                  onClick={handleBuscar}
-                  disabled={searching}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-white rounded-sm min-w-[120px]"
+                  onClick={handleDescargarPlanillas}
+                  disabled={loading}
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg"
                 >
-                  {searching ? (
+                  {loading ? (
                     <>
                       <span className="animate-spin mr-2">⏳</span>
-                      Buscando...
+                      Generando...
                     </>
                   ) : (
                     <>
-                      <Search className="w-4 h-4 mr-2" />
-                      BUSCAR
+                      <FileDown className="w-5 h-5 mr-2" />
+                      Exportar ({seleccionados.length})
                     </>
                   )}
                 </Button>
-              </div>
-            </CardContent>
-          )}
-        </Card>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
 
-        {/* Resultados */}
-        {resultados.length > 0 && (
-          <Card className="border-slate-200 shadow-sm rounded-sm bg-white">
-            <CardHeader className="bg-slate-50 border-b border-slate-100 py-3 px-4">
+        {/* Panel de Filtros */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="mb-6 backdrop-blur-sm bg-white/80 border-slate-200 shadow-xl">
+            <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50/50 border-b border-slate-200">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-slate-600" />
-                  <CardTitle className="text-sm font-bold text-slate-700 uppercase">Nómina de Personal ({resultados.length})</CardTitle>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <Filter className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg font-bold text-slate-900">
+                      Criterios de Búsqueda
+                    </CardTitle>
+                    <p className="text-sm text-slate-500 mt-0.5">
+                      Filtre por múltiples parámetros simultáneamente
+                    </p>
+                  </div>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={handleSeleccionarTodos}
-                  className="text-xs text-slate-600 hover:text-slate-900"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="text-slate-600 hover:text-slate-900"
                 >
-                  {seleccionados.length === resultados.length
-                    ? 'Deseleccionar todos'
-                    : 'Seleccionar todos'}
+                  {showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros'}
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-slate-100 text-slate-700 font-semibold uppercase text-xs">
-                    <tr>
-                      <th className="p-3 w-10 text-center border-b border-slate-200">
-                        <input
-                          type="checkbox"
-                          checked={
-                            seleccionados.length === resultados.length &&
-                            resultados.length > 0
-                          }
-                          onChange={handleSeleccionarTodos}
-                          className="w-4 h-4 rounded-sm border-slate-300 text-slate-900 focus:ring-slate-500"
-                        />
-                      </th>
-                      <th className="p-3 border-b border-slate-200">Agente</th>
-                      <th className="p-3 border-b border-slate-200">Identificación</th>
-                      <th className="p-3 border-b border-slate-200">Jerarquía / Cargo</th>
-                      <th className="p-3 border-b border-slate-200">Destino</th>
-                      <th className="p-3 border-b border-slate-200 text-center">Estado</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {resultados.map(personal => (
-                      <tr
-                        key={personal.id}
-                        className="hover:bg-slate-50 transition-colors"
+
+            {showFilters && (
+              <CardContent className="p-6">
+                {/* Búsqueda General */}
+                <div className="mb-6">
+                  <Label className="text-sm font-semibold text-slate-700 mb-2 block">
+                    Búsqueda General
+                  </Label>
+                  <div className="relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                    <Input
+                      name="search"
+                      value={filtros.search}
+                      onChange={handleChange}
+                      placeholder="Buscar por apellido, nombre, DNI, legajo..."
+                      className="pl-12 h-12 text-base border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                      onKeyPress={e => e.key === 'Enter' && handleBuscar()}
+                    />
+                  </div>
+                </div>
+
+                {/* Filtros Principales */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700">
+                      Tipo de Personal
+                    </Label>
+                    <select
+                      name="tipoPersonal"
+                      value={filtros.tipoPersonal}
+                      onChange={handleChange}
+                      className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Todos</option>
+                      <option value="SUPERIOR">Superior</option>
+                      <option value="SUBALTERNO">Subalterno</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700">
+                      Jerarquía
+                    </Label>
+                    <select
+                      name="jerarquia"
+                      value={filtros.jerarquia}
+                      onChange={handleChange}
+                      className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Todas</option>
+                      <optgroup label="Superiores">
+                        {jerarquiasSuperiores.map(j => (
+                          <option key={j} value={j}>
+                            {j}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Subalternos">
+                        {jerarquiasSubalternas.map(j => (
+                          <option key={j} value={j}>
+                            {j}
+                          </option>
+                        ))}
+                      </optgroup>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700">
+                      Sección
+                    </Label>
+                    <select
+                      name="seccion"
+                      value={filtros.seccion}
+                      onChange={handleChange}
+                      className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Todas</option>
+                      {secciones.map(s => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700">
+                      Estado de Servicio
+                    </Label>
+                    <select
+                      name="estadoServicio"
+                      value={filtros.estadoServicio}
+                      onChange={handleChange}
+                      className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Todos</option>
+                      <option value="ACTIVO">Activo</option>
+                      <option value="LICENCIA">Licencia</option>
+                      <option value="SUSPENSION">Suspensión</option>
+                      <option value="RETIRADO">Retirado</option>
+                      <option value="BAJA">Baja</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Filtros Adicionales */}
+                <details className="group mb-4">
+                  <summary className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-blue-600 hover:text-blue-700 mb-3">
+                    <ChevronRight className="w-4 h-4 transition-transform group-open:rotate-90" />
+                    Filtros Adicionales
+                  </summary>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-3 pl-6">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold text-slate-700">
+                        Jurisdicción
+                      </Label>
+                      <Input
+                        name="jurisdiccion"
+                        value={filtros.jurisdiccion}
+                        onChange={handleChange}
+                        placeholder="Ej: CRIA 1ra"
+                        className="border-slate-300"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold text-slate-700">
+                        Regional
+                      </Label>
+                      <Input
+                        name="regional"
+                        value={filtros.regional}
+                        onChange={handleChange}
+                        placeholder="Ej: Tucumán"
+                        className="border-slate-300"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold text-slate-700">
+                        Sexo
+                      </Label>
+                      <select
+                        name="sexo"
+                        value={filtros.sexo}
+                        onChange={handleChange}
+                        className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
-                        <td className="p-3 text-center">
+                        <option value="">Todos</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold text-slate-700">
+                        Estado Civil
+                      </Label>
+                      <select
+                        name="estadoCivil"
+                        value={filtros.estadoCivil}
+                        onChange={handleChange}
+                        className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Todos</option>
+                        <option value="SOLTERO">Soltero/a</option>
+                        <option value="CASADO">Casado/a</option>
+                        <option value="DIVORCIADO">Divorciado/a</option>
+                        <option value="VIUDO">Viudo/a</option>
+                        <option value="CONCUBINO">Concubinato</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold text-slate-700">
+                        Grupo Sanguíneo
+                      </Label>
+                      <select
+                        name="grupoSanguineo"
+                        value={filtros.grupoSanguineo}
+                        onChange={handleChange}
+                        className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Todos</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                      </select>
+                    </div>
+                  </div>
+                </details>
+
+                {/* Acciones */}
+                <div className="flex justify-between items-center pt-4 border-t border-slate-200">
+                  <div className="text-sm text-slate-500">
+                    {Object.values(filtros).filter(v => v !== '').length >
+                      0 && (
+                      <span>
+                        {Object.values(filtros).filter(v => v !== '').length}{' '}
+                        filtro(s) activo(s)
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={handleLimpiar}
+                      className="border-slate-300 hover:bg-slate-50"
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      Limpiar
+                    </Button>
+                    <Button
+                      onClick={() => handleBuscar(true)}
+                      disabled={searching}
+                      size="lg"
+                      className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white min-w-[140px]"
+                    >
+                      {searching ? (
+                        <>
+                          <span className="animate-spin mr-2">⏳</span>
+                          Buscando...
+                        </>
+                      ) : (
+                        <>
+                          <Search className="w-5 h-5 mr-2" />
+                          Buscar
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            )}
+          </Card>
+        </motion.div>
+
+        {/* Resultados */}
+        {resultados.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card className="backdrop-blur-sm bg-white/80 border-slate-200 shadow-xl">
+              <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50/50 border-b border-slate-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-green-100 rounded-lg">
+                      <Users className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg font-bold text-slate-900">
+                        Resultados de Búsqueda
+                      </CardTitle>
+                      <p className="text-sm text-slate-500 mt-0.5">
+                        {total} registro{total !== 1 ? 's' : ''} encontrado
+                        {total !== 1 ? 's' : ''}
+                        {seleccionados.length > 0 &&
+                          ` · ${seleccionados.length} seleccionado${
+                            seleccionados.length !== 1 ? 's' : ''
+                          }`}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleSeleccionarTodos}
+                      className="text-slate-600 hover:text-slate-900"
+                    >
+                      {seleccionados.length === resultados.length
+                        ? 'Deseleccionar todos'
+                        : 'Seleccionar todos'}
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-slate-100 border-b border-slate-200">
+                      <tr>
+                        <th className="p-4 w-12 text-center">
                           <input
                             type="checkbox"
-                            checked={seleccionados.includes(personal.id)}
-                            onChange={() => handleToggleSeleccion(personal.id)}
-                            className="w-4 h-4 rounded-sm border-slate-300 text-slate-900 focus:ring-slate-500"
+                            checked={
+                              seleccionados.length === resultados.length &&
+                              resultados.length > 0
+                            }
+                            onChange={handleSeleccionarTodos}
+                            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                           />
-                        </td>
-                        <td className="p-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded bg-slate-200 overflow-hidden flex-shrink-0 border border-slate-300">
-                              {personal.fotoUrl ? (
-                                <img
-                                  src={personal.fotoUrl}
-                                  alt=""
-                                  className="w-full h-full object-cover"
-                                />
+                        </th>
+                        <th className="p-4 text-left">
+                          <button
+                            onClick={() => handleSort('apellidos')}
+                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 hover:text-slate-900"
+                          >
+                            Apellido y Nombre
+                            {sortField === 'apellidos' &&
+                              (sortOrder === 'asc' ? (
+                                <SortAsc className="w-4 h-4" />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center text-slate-400">
-                                  <Users className="w-4 h-4" />
+                                <SortDesc className="w-4 h-4" />
+                              ))}
+                          </button>
+                        </th>
+                        <th className="p-4 text-left">
+                          <button
+                            onClick={() => handleSort('dni')}
+                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 hover:text-slate-900"
+                          >
+                            Identificación
+                            {sortField === 'dni' &&
+                              (sortOrder === 'asc' ? (
+                                <SortAsc className="w-4 h-4" />
+                              ) : (
+                                <SortDesc className="w-4 h-4" />
+                              ))}
+                          </button>
+                        </th>
+                        <th className="p-4 text-left">
+                          <button
+                            onClick={() => handleSort('jerarquia')}
+                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 hover:text-slate-900"
+                          >
+                            Jerarquía
+                            {sortField === 'jerarquia' &&
+                              (sortOrder === 'asc' ? (
+                                <SortAsc className="w-4 h-4" />
+                              ) : (
+                                <SortDesc className="w-4 h-4" />
+                              ))}
+                          </button>
+                        </th>
+                        <th className="p-4 text-left font-semibold text-sm text-slate-700">
+                          Sección
+                        </th>
+                        <th className="p-4 text-center">
+                          <button
+                            onClick={() => handleSort('estadoServicio')}
+                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 hover:text-slate-900"
+                          >
+                            Estado
+                            {sortField === 'estadoServicio' &&
+                              (sortOrder === 'asc' ? (
+                                <SortAsc className="w-4 h-4" />
+                              ) : (
+                                <SortDesc className="w-4 h-4" />
+                              ))}
+                          </button>
+                        </th>
+                        <th className="p-4 text-center font-semibold text-sm text-slate-700">
+                          Acciones
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {resultados.map((personal, index) => (
+                        <motion.tr
+                          key={personal.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.02 }}
+                          className="hover:bg-blue-50/50 transition-colors"
+                        >
+                          <td className="p-4 text-center">
+                            <input
+                              type="checkbox"
+                              checked={seleccionados.includes(personal.id)}
+                              onChange={() =>
+                                handleToggleSeleccion(personal.id)
+                              }
+                              className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                            />
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-cyan-100 overflow-hidden flex-shrink-0 border-2 border-white shadow-sm">
+                                {personal.fotoUrl ? (
+                                  <img
+                                    src={personal.fotoUrl}
+                                    alt=""
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-blue-600">
+                                    <Users className="w-5 h-5" />
+                                  </div>
+                                )}
+                              </div>
+                              <div>
+                                <div className="font-bold text-slate-900">
+                                  {personal.apellidos}, {personal.nombres}
+                                </div>
+                                <div className="text-xs text-slate-500 flex items-center gap-2">
+                                  <span className="px-2 py-0.5 bg-slate-100 rounded text-slate-600 font-medium">
+                                    {personal.tipoPersonal}
+                                  </span>
+                                  {personal.sexo && (
+                                    <span className="text-slate-400">
+                                      •{' '}
+                                      {personal.sexo === 'M'
+                                        ? 'Masculino'
+                                        : 'Femenino'}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs font-medium text-slate-500">
+                                  DNI:
+                                </span>
+                                <span className="font-semibold text-slate-900">
+                                  {personal.dni}
+                                </span>
+                              </div>
+                              {personal.numeroAsignacion && (
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium text-slate-500">
+                                    Leg:
+                                  </span>
+                                  <span className="text-sm text-slate-700">
+                                    {personal.numeroAsignacion}
+                                  </span>
                                 </div>
                               )}
                             </div>
-                            <div>
-                              <div className="font-bold text-slate-900">
-                                {personal.apellidos}, {personal.nombres}
+                          </td>
+                          <td className="p-4">
+                            <div className="space-y-1">
+                              <div className="font-semibold text-slate-900">
+                                {personal.jerarquia || '-'}
                               </div>
-                              <div className="text-xs text-slate-500">
-                                {personal.tipoPersonal}
+                              {personal.cargo && (
+                                <div className="text-xs text-slate-500">
+                                  {personal.cargo}
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div className="text-sm text-slate-700">
+                              {personal.seccion || '-'}
+                            </div>
+                            {personal.jurisdiccion && (
+                              <div className="text-xs text-slate-500 mt-1">
+                                {personal.jurisdiccion}
                               </div>
+                            )}
+                          </td>
+                          <td className="p-4 text-center">
+                            <span
+                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                                personal.estadoServicio === 'ACTIVO'
+                                  ? 'bg-green-100 text-green-700 border border-green-200'
+                                  : personal.estadoServicio === 'LICENCIA'
+                                  ? 'bg-yellow-100 text-yellow-700 border border-yellow-200'
+                                  : personal.estadoServicio === 'SUSPENSION'
+                                  ? 'bg-orange-100 text-orange-700 border border-orange-200'
+                                  : 'bg-slate-100 text-slate-600 border border-slate-200'
+                              }`}
+                            >
+                              {personal.estadoServicio || 'N/D'}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center justify-center gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                  navigate(`/personal/${personal.id}`)
+                                }
+                                className="h-8 w-8 p-0 hover:bg-blue-100 hover:text-blue-600"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                  navigate(`/personal/editar/${personal.id}`)
+                                }
+                                className="h-8 w-8 p-0 hover:bg-amber-100 hover:text-amber-600"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
                             </div>
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div className="space-y-0.5">
-                            <div className="text-slate-700 font-medium">DNI: {personal.dni}</div>
-                            <div className="text-xs text-slate-500">Legajo: {personal.numeroAsignacion || '-'}</div>
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div className="space-y-0.5">
-                            <div className="font-medium text-slate-900">
-                              {personal.jerarquia?.nombre || '-'}
-                            </div>
-                            <div className="text-xs text-slate-500">
-                              {personal.cargo || '-'}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-3 text-slate-700">
-                          {personal.seccion?.nombre || '-'}
-                        </td>
-                        <td className="p-3 text-center">
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
-                              personal.estadoServicio === 'ACTIVO'
-                                ? 'bg-green-50 text-green-700 border-green-200'
-                                : personal.estadoServicio === 'INACTIVO'
-                                ? 'bg-slate-100 text-slate-600 border-slate-200'
-                                : 'bg-red-50 text-red-700 border-red-200'
-                            }`}
-                          >
-                            {personal.estadoServicio}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Paginación */}
+                {totalPages > 1 && (
+                  <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                    <div className="text-sm text-slate-600">
+                      Página {page} de {totalPages}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setPage(p => Math.max(1, p - 1));
+                          handleBuscar(false);
+                        }}
+                        disabled={page === 1}
+                        className="border-slate-300"
+                      >
+                        Anterior
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setPage(p => Math.min(totalPages, p + 1));
+                          handleBuscar(false);
+                        }}
+                        disabled={page === totalPages}
+                        className="border-slate-300"
+                      >
+                        Siguiente
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
         )}
 
+        {/* Estado vacío */}
         {resultados.length === 0 && !searching && (
-          <div className="text-center py-16 bg-white border border-slate-200 border-dashed rounded-sm">
-            <div className="bg-slate-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="w-8 h-8 text-slate-400" />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-center py-20 backdrop-blur-sm bg-white/60 border-2 border-dashed border-slate-300 rounded-2xl"
+          >
+            <div className="bg-gradient-to-br from-blue-100 to-cyan-100 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <Search className="w-10 h-10 text-blue-600" />
             </div>
-            <h3 className="text-lg font-medium text-slate-900">Sin Resultados</h3>
-            <p className="text-slate-500 max-w-sm mx-auto mt-1">
-              {filtros.search || filtros.tipoPersonal || filtros.jerarquiaId
-                ? 'No se encontraron registros que coincidan con los criterios de búsqueda.'
-                : 'Utilice el panel de filtros superior para realizar una búsqueda en el padrón.'}
+            <h3 className="text-xl font-bold text-slate-900 mb-2">
+              Inicie una búsqueda
+            </h3>
+            <p className="text-slate-500 max-w-md mx-auto">
+              {filtros.search || Object.values(filtros).some(v => v !== '')
+                ? 'No se encontraron resultados con los criterios especificados.'
+                : 'Utilice los filtros de búsqueda para encontrar personal en el sistema.'}
             </p>
+            {Object.values(filtros).some(v => v !== '') && (
+              <Button
+                onClick={handleLimpiar}
+                className="mt-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
+              >
+                Limpiar filtros
+              </Button>
+            )}
+          </motion.div>
+        )}
+
+        {searching && (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-lg font-medium text-slate-700">
+                Buscando personal...
+              </p>
+            </div>
           </div>
         )}
       </div>
