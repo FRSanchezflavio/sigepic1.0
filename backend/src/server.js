@@ -1,9 +1,13 @@
 const app = require('./app');
 const logger = require('./utils/logger');
 const { PrismaClient } = require('@prisma/client');
+const createUploadDirs = require('./utils/createUploadDirs');
 
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3000;
+
+// Crear directorios de uploads
+createUploadDirs();
 
 // Manejo de errores no capturados
 process.on('uncaughtException', error => {

@@ -1,5 +1,25 @@
 const { uploadFoto, uploadDocumento } = require('../config/upload');
 const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Crear directorios si no existen
+const createUploadDirs = () => {
+  const dirs = [
+    path.join(__dirname, '../../uploads/fotos'),
+    path.join(__dirname, '../../uploads/documentos'),
+  ];
+  
+  dirs.forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+      console.log(`✅ Directorio creado: ${dir}`);
+    }
+  });
+};
+
+// Crear directorios al iniciar
+createUploadDirs();
 
 const uploadFotoMiddleware = (req, res, next) => {
   uploadFoto.single('foto')(req, res, err => {
