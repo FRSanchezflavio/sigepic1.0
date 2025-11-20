@@ -48,4 +48,13 @@ export const personalService = {
   obtenerHistorial: async id => {
     return await api.get(`/personal/${id}/historial`);
   },
+
+  // Aliases for compatibility
+  getById: async id => {
+    return await api.get(`/personal/${id}`);
+  },
+
+  update: async (id, datos) => {
+    return await api.put(`/personal/${id}`, datos);
+  },
 };

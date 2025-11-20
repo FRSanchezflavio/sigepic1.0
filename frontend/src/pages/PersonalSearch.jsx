@@ -67,12 +67,12 @@ const PersonalSearch = () => {
   ];
 
   const secciones = [
-    'Análisis Informática Forense',
+    'Delitos Generales y Especiales',
     'Cibercrimen',
-    'Investigaciones Especiales',
-    'Inteligencia Criminal',
-    'Operaciones Tácticas',
-    'Administración',
+    'Of. Central',
+    'Análisis Informática Forense',
+    'Explotación de Prensa',
+    'Análisis Delictual',
   ];
 
   const [filtros, setFiltros] = useState({
@@ -231,31 +231,37 @@ const PersonalSearch = () => {
       <div className="max-w-[1800px] mx-auto relative z-10">
         {/* Header */}
         <motion.div
-          className="mb-8"
+          className="mb-10"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/dashboard')}
-                className="h-10 w-10 hover:bg-white/60"
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/dashboard')}
+            className="mb-6 hover:bg-white/80 hover:shadow-md transition-all"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Volver al Dashboard
+          </Button>
+
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
+            <div>
+              <motion.h1
+                className="text-5xl font-extrabold leading-tight bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan bg-clip-text text-transparent mb-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
               >
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-              <div>
-                <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
-                  <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg">
-                    <Search className="w-6 h-6 text-white" />
-                  </div>
-                  Búsqueda Avanzada de Personal
-                </h1>
-                <p className="text-slate-600 mt-1">
-                  Sistema de consulta integral del padrón policial
-                </p>
-              </div>
+                Búsqueda Avanzada de Personal
+              </motion.h1>
+              <motion.p
+                className="text-lg text-slate-600 font-medium"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                Sistema de consulta integral del padrón policial
+              </motion.p>
             </div>
 
             {seleccionados.length > 0 && (
