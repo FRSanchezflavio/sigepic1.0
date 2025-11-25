@@ -33,6 +33,13 @@ router.get(
   personalController.estadisticas
 );
 
+// GET /api/personal/exportar - Exportar personal
+router.get(
+  '/exportar',
+  verificarPermiso('personal', 'read'),
+  personalController.exportar
+);
+
 // POST /api/personal/planillas - Generar planillas PDF
 router.post(
   '/planillas',

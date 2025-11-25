@@ -449,6 +449,92 @@ const generarPlanillas = async (req, res, next) => {
   }
 };
 
+const exportar = async (req, res, next) => {
+  try {
+    const {
+      search = '',
+      tipoPersonal,
+      jerarquia,
+      seccion,
+      estadoServicio,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = req.query;
+
+    // Construir filtros (reutilizando lógica de buscar)
+    const where = {};
+
+    if (search) {
+      where.OR = [
+        { apellidos: { contains: search, mode: 'insensitive' } },
+        { nombres: { contains: search, mode: 'insensitive' } },
+        { dni: { contains: search, mode: 'insensitive' } },
+        { numeroAsignacion: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    if (tipoPersonal) where.tipoPersonal = tipoPersonal;
+    if (jerarquia) where.jerarquia = jerarquia;
+    if (seccion) where.seccion = seccion;
+    if (estadoServicio) where.estadoServicio = estadoServicio;
+
+    const personal = await prisma.personal.findMany({
+      where,
+      orderBy: { [sortBy]: sortOrder },
+      select: {
+        numeroAsignacion: true,
+        apellidos: true,
+        nombres: true,
+        dni: true,
+        jerarquia: true,
+        seccion: true,
+        estadoServicio: true,
+        cargo: true,
+        tipoPersonal: true,
+      },
+    });
+
+    // Generar CSV
+    const campos = [
+      'N° Asignación',
+      'Apellidos',
+      'Nombres',
+      'DNI',
+      'Jerarquía',
+      'Sección',
+      'Estado',
+      'Cargo',
+      'Tipo Personal',
+    ];
+
+    let csvContent = campos.join(',') + '\n';
+
+    personal.forEach(p => {
+      const row = [
+        p.numeroAsignacion || '',
+        `"${p.apellidos}"`,
+        `"${p.nombres}"`,
+        p.dni,
+        p.jerarquia || '',
+        p.seccion || '',
+        p.estadoServicio,
+        p.cargo || '',
+        p.tipoPersonal || '',
+      ];
+      csvContent += row.join(',') + '\n';
+    });
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename=personal_export.csv'
+    );
+    res.status(200).send(csvContent);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   buscar,
   obtenerPorId,
@@ -460,4 +546,5 @@ module.exports = {
   subirArchivos,
   obtenerHistorial,
   generarPlanillas,
+  exportar,
 };

@@ -5,6 +5,13 @@ export const personalService = {
     return await api.get('/personal', { params });
   },
 
+  exportar: async params => {
+    return await api.get('/personal/exportar', {
+      params,
+      responseType: 'blob',
+    });
+  },
+
   obtenerPorId: async id => {
     return await api.get(`/personal/${id}`);
   },
