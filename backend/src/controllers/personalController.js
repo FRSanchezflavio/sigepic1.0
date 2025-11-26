@@ -42,20 +42,6 @@ const buscar = async (req, res, next) => {
         skip,
         take,
         orderBy: { [sortBy]: sortOrder },
-        select: {
-          id: true,
-          apellidos: true,
-          nombres: true,
-          numeroAsignacion: true,
-          dni: true,
-          tipoPersonal: true,
-          jerarquia: true,
-          cargo: true,
-          seccion: true,
-          estadoServicio: true,
-          fotoUrl: true,
-          createdAt: true,
-        },
       }),
       prisma.personal.count({ where }),
     ]);
@@ -218,6 +204,69 @@ const actualizar = async (req, res, next) => {
       return res.status(404).json({ error: 'Personal no encontrado' });
     }
 
+    // Convertir valores booleanos desde FormData (vienen como strings)
+    const booleanFields = [
+      'conduceAutos',
+      'conduceMotos',
+      'conduceOtros',
+      'poseeCarnetManejo',
+      'poseeCredencialPolicial',
+      'poseeChalecoAsignado',
+    ];
+
+    booleanFields.forEach(field => {
+      if (datos[field] !== undefined) {
+        datos[field] = datos[field] === 'true' || datos[field] === true;
+      }
+    });
+
+    // Asignar jerarquia desde jerarquiaId si existe
+    if (datos.jerarquiaId) {
+      datos.jerarquia = datos.jerarquiaId;
+    }
+
+    // Asignar seccion desde seccionId si existe
+    if (datos.seccionId) {
+      datos.seccion = datos.seccionId;
+    }
+
+    // Manejar foto si se subió
+    if (req.files && req.files.foto && req.files.foto[0]) {
+      datos.fotoUrl = `/uploads/fotos/${req.files.foto[0].filename}`;
+    }
+
+    // Manejar archivos adjuntos nuevos
+    if (req.files && req.files.archivos && req.files.archivos.length > 0) {
+      const nuevosArchivos = req.files.archivos.map(file => ({
+        nombre: file.originalname,
+        url: `/uploads/documentos/${file.filename}`,
+        tipo: file.mimetype,
+        tamano: file.size,
+        fecha: new Date(),
+      }));
+      
+      // Combinar con archivos existentes si se desea mantenerlos
+      // Nota: La lógica actual en frontend no envía los archivos existentes de vuelta,
+      // solo los nuevos. Para mantener los viejos, deberíamos obtenerlos del registro anterior
+      // y concatenar.
+      const archivosAnteriores = anterior.archivosAdjuntos && Array.isArray(anterior.archivosAdjuntos) 
+        ? anterior.archivosAdjuntos 
+        : [];
+      
+      datos.archivosAdjuntos = [...archivosAnteriores, ...nuevosArchivos];
+    }
+
+    // Limpiar campos vacíos o null (excepto booleanos)
+    Object.keys(datos).forEach(key => {
+      if (
+        datos[key] === '' ||
+        datos[key] === 'null' ||
+        datos[key] === 'undefined'
+      ) {
+        delete datos[key];
+      }
+    });
+
     // Actualizar
     const personal = await prisma.personal.update({
       where: { id: parseInt(id) },
@@ -250,6 +299,7 @@ const actualizar = async (req, res, next) => {
 
     res.json(personal);
   } catch (error) {
+    console.error('Error al actualizar personal:', error);
     next(error);
   }
 };

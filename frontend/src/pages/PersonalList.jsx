@@ -345,33 +345,28 @@ export default function PersonalList() {
                 <table className="w-full">
                   <thead className="bg-slate-50/50 border-b border-slate-200">
                     <tr>
-                      <th 
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 transition-colors"
-                        onClick={() => handleSort('numeroAsignacion')}
-                      >
-                        <div className="flex items-center gap-2">
-                          N° Asignación
-                          <ArrowUpDown className="h-3 w-3" />
-                        </div>
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Nombre
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        DNI
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Jerarquía
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Sección
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Estado
-                      </th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                        Acciones
-                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">N° Asignación</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Apellidos y Nombres</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Jerarquía</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Cargo</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Sección y Función</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Horario</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Profesión</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Celular</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Alta Dep.</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">DNI</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">CUIL</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Fecha Nac.</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Estado Civil</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Sexo</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Email</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Domicilio</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Jurisdicción</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Regional</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Arma</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Chaleco</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Estado</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase whitespace-nowrap sticky right-0 bg-slate-50 shadow-l">Acciones</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white/50 divide-y divide-slate-200">
@@ -383,22 +378,36 @@ export default function PersonalList() {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
                       >
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
-                          {p.numeroAsignacion || '-'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-slate-900">
-                            {p.apellidos}, {p.nombres}
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{p.numeroAsignacion || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900 font-medium">{p.apellidos}, {p.nombres}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.jerarquia || p.jerarquiaId || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.numeroCargo || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                          <div className="flex flex-col">
+                            <span className="font-medium">{p.seccion || p.seccionId || '-'}</span>
+                            <span className="text-xs text-slate-400">{p.funcionDepto}</span>
                           </div>
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.horarioLaboral || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.profesion || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.celular || '-'}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                          {p.dni}
+                          {p.altaDependencia ? new Date(p.altaDependencia).toLocaleDateString() : '-'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.dni}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.cuil || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.fechaNacimiento || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.estadoCivil || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.sexo || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.email || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.domicilio || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.jurisdiccion || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.regional || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                          {p.armaTipo ? `${p.armaTipo} - ${p.nroArma || ''}` : '-'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                          {p.jerarquia}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                          {p.seccion || '-'}
+                          {p.poseeChalecoAsignado ? `SI (${p.nroSerieChalecoAsignado || ''})` : 'NO'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <Select 
@@ -417,7 +426,7 @@ export default function PersonalList() {
                             <SelectItem value="DISPONIBILIDAD">DISPONIBILIDAD</SelectItem>
                           </Select>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium sticky right-0 bg-white/80 backdrop-blur-sm shadow-l">
                           <Button
                             variant="ghost"
                             size="sm"

@@ -70,6 +70,7 @@ const personalSchema = z.object({
   altaDepartamental: z.string().optional(),
   poseeChalecoAsignado: z.string().optional(),
   nroSerieChalecoAsignado: z.string().optional(),
+  observaciones: z.string().optional(),
 });
 
 const PersonalEdit = () => {
@@ -80,6 +81,7 @@ const PersonalEdit = () => {
   const [foto, setFoto] = useState(null);
   const [fotoPreview, setFotoPreview] = useState(null);
   const [archivos, setArchivos] = useState([]);
+  const [existingFiles, setExistingFiles] = useState([]);
   const [poseeCarnet, setPoseeCarnet] = useState(false);
   const [poseeCredencial, setPoseeCredencial] = useState(false);
   const [poseeChalecoState, setPoseeChalecoState] = useState(false);
@@ -197,6 +199,19 @@ const PersonalEdit = () => {
       // Cargar foto si existe
       if (personal.fotoUrl) {
         setFotoPreview(personal.fotoUrl);
+      }
+
+      // Cargar archivos existentes
+      if (personal.archivosAdjuntos && Array.isArray(personal.archivosAdjuntos)) {
+        setExistingFiles(personal.archivosAdjuntos);
+      }
+      
+      // Cargar observaciones
+      if (personal.observaciones) {
+        reset((formValues) => ({
+          ...formValues,
+          observaciones: personal.observaciones,
+        }));
       }
     } catch (err) {
       console.error('Error al cargar datos:', err);
@@ -1046,6 +1061,16 @@ const PersonalEdit = () => {
                     {...register('altaDepartamental')}
                   />
                 </div>
+
+                <div className="md:col-span-2 lg:col-span-3">
+                  <Label htmlFor="observaciones">Observaciones</Label>
+                  <textarea
+                    id="observaciones"
+                    {...register('observaciones')}
+                    className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    placeholder="Observaciones adicionales..."
+                  />
+                </div>
               </CardContent>
             </Card>
           </motion.div>
@@ -1090,6 +1115,52 @@ const PersonalEdit = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Archivos Existentes */}
+                {existingFiles.length > 0 && (
+                  <motion.div
+                    className="mt-6 space-y-3"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                        <FileText className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <p className="text-sm font-semibold text-slate-700">
+                        Archivos Cargados ({existingFiles.length})
+                      </p>
+                    </div>
+                    {existingFiles.map((archivo, index) => (
+                      <motion.div
+                        key={`existing-${index}`}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-white rounded-xl border border-slate-200 hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-police-navy/10 flex items-center justify-center">
+                            <FileText className="w-5 h-5 text-police-navy" />
+                          </div>
+                          <div>
+                            <a 
+                              href={archivo.url} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-sm font-medium text-slate-700 hover:text-blue-600 hover:underline"
+                            >
+                              {archivo.nombre}
+                            </a>
+                            <p className="text-xs text-slate-500">
+                              {(archivo.tamano / 1024).toFixed(1)} KB • {new Date(archivo.fecha).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                )}
 
                 {archivos.length > 0 && (
                   <motion.div
