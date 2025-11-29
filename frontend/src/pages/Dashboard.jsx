@@ -66,7 +66,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/20 to-slate-100 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/20 to-slate-100 relative overflow-x-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -210,7 +210,7 @@ export default function Dashboard() {
 
         {/* Menu Cards */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10"
           variants={container}
           initial="hidden"
           animate="show"
@@ -225,12 +225,12 @@ export default function Dashboard() {
                 transition={{ duration: 0.3 }}
               >
                 <Card
-                  className="group cursor-pointer border-2 border-slate-200/60 hover:border-police-cyan/60 transition-all duration-300 hover:shadow-2xl bg-white/90 backdrop-blur-lg overflow-hidden relative h-[280px] flex flex-col"
+                  className="group cursor-pointer border-2 border-slate-200/60 hover:border-police-cyan/60 transition-all duration-300 hover:shadow-2xl bg-white/90 backdrop-blur-lg overflow-visible relative min-h-[320px] flex flex-col"
                   onClick={() => navigate(option.path)}
                 >
                   {/* Card Header with Icon */}
                   <div
-                    className={`bg-gradient-to-br ${option.gradient} p-6 relative overflow-hidden`}
+                    className={`bg-gradient-to-br ${option.gradient} p-5 relative overflow-hidden`}
                   >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl transform translate-x-8 -translate-y-8" />
                     <motion.div
@@ -243,7 +243,7 @@ export default function Dashboard() {
                       }}
                     >
                       <Icon
-                        className="w-16 h-16 text-white drop-shadow-lg"
+                        className="w-14 h-14 text-white drop-shadow-lg"
                         strokeWidth={2.5}
                       />
                     </motion.div>
