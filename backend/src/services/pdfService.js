@@ -60,9 +60,9 @@ class PDFService {
         doc.moveDown(0.5);
         doc.fontSize(10);
 
-        this.addField(doc, 'Jerarquía:', personal.jerarquia?.nombre || 'N/A');
+        this.addField(doc, 'Jerarquía:', personal.jerarquia || 'N/A');
         this.addField(doc, 'Especialidad:', personal.especialidad || 'N/A');
-        this.addField(doc, 'Sección:', personal.seccion?.nombre || 'N/A');
+        this.addField(doc, 'Sección:', personal.seccion || 'N/A');
         this.addField(
           doc,
           'Fecha Ingreso:',
@@ -325,7 +325,15 @@ class PDFService {
 
   formatDate(date) {
     if (!date) return 'N/A';
-    return format(new Date(date), 'dd/MM/yyyy', { locale: es });
+    // Si ya parece una fecha formateada (DD/MM/YYYY), devolverla tal cual
+    if (typeof date === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
+      return date;
+    }
+    try {
+      return format(new Date(date), 'dd/MM/yyyy', { locale: es });
+    } catch (e) {
+      return date || 'N/A';
+    }
   }
 
   // Generar planillas de personal (Ficha de Datos del Empleado Policial)
@@ -428,7 +436,7 @@ class PDFService {
           y += 20;
           // Jerarquía y Legajo Personal
           doc.font('Helvetica-Bold').text('Jerarquía:', leftMargin, y);
-          doc.font('Helvetica').text(personal.jerarquia?.nombre || '', leftMargin + 60, y);
+          doc.font('Helvetica').text(personal.jerarquia || '', leftMargin + 60, y);
           drawDottedLine(leftMargin + 60, y + 10, 180);
 
           doc.font('Helvetica-Bold').text('Legajo Personal:', leftMargin + 250, y);
@@ -438,7 +446,7 @@ class PDFService {
           y += 20;
           // Pertenece a División/Sección
           doc.font('Helvetica-Bold').text('Pertenece a División/Sección:', leftMargin, y);
-          doc.font('Helvetica').text(personal.seccion?.nombre || '', leftMargin + 170, y);
+          doc.font('Helvetica').text(personal.seccion || '', leftMargin + 170, y);
           drawDottedLine(leftMargin + 170, y + 10, contentWidth - 170);
 
           y += 20;

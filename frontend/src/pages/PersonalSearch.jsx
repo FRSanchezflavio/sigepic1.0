@@ -818,7 +818,7 @@ const PersonalSearch = () => {
                                         personal.archivosAdjuntos.length - 1
                                       ];
                                     window.open(
-                                      `http://localhost:3000${ultimoArchivo.url}`,
+                                      ultimoArchivo.url,
                                       '_blank'
                                     );
                                   } else {

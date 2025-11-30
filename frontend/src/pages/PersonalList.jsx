@@ -430,7 +430,7 @@ export default function PersonalList() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => navigate(`/personal/${p.id}/editar`)}
+                            onClick={() => navigate(`/personal/editar/${p.id}`)}
                             title="Editar"
                             className="hover:bg-blue-100 hover:text-blue-700"
                           >

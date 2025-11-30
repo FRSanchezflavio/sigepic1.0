@@ -470,10 +470,6 @@ const generarPlanillas = async (req, res, next) => {
     // Obtener personal
     const personal = await prisma.personal.findMany({
       where: { id: { in: ids.map(id => parseInt(id)) } },
-      include: {
-        jerarquia: true,
-        seccion: true,
-      },
     });
 
     if (personal.length === 0) {
