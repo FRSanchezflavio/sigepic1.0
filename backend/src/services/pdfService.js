@@ -328,13 +328,13 @@ class PDFService {
     return format(new Date(date), 'dd/MM/yyyy', { locale: es });
   }
 
-  // Generar planillas de personal (single-page con foto)
+  // Generar planillas de personal (Ficha de Datos del Empleado Policial)
   async generarPlanillasPersonal(personalList) {
     return new Promise((resolve, reject) => {
       try {
         const fileName = `planillas_personal_${Date.now()}.pdf`;
         const filePath = path.join(this.reportsDir, fileName);
-        const doc = new PDFDocument({ margin: 30, size: 'A4' });
+        const doc = new PDFDocument({ margin: 40, size: 'A4' }); // Margen ajustado
         const stream = fs.createWriteStream(filePath);
 
         doc.pipe(stream);
@@ -342,21 +342,35 @@ class PDFService {
         personalList.forEach((personal, index) => {
           if (index > 0) doc.addPage();
 
-          // Encabezado institucional
+          // --- ENCABEZADO ---
+          // Nota: Como no tengo los escudos exactos, usaré espacios o texto.
+          // Si tuvieras los logos en assets, se cargarían aquí.
+          
           doc
-            .fontSize(16)
-            .font('Helvetica-Bold')
-            .text('POLICÍA BOLIVIANA', { align: 'center' })
             .fontSize(14)
-            .text('Departamento de Inteligencia Criminal D-2', {
-              align: 'center',
-            })
+            .font('Helvetica-Bold')
+            .text('POLICÍA DE TUCUMÁN', { align: 'center' })
             .fontSize(12)
-            .text('PLANILLA DE PERSONAL', { align: 'center' })
-            .moveDown(1);
+            .text('DEPARTAMENTO INTELIGENCIA CRIMINAL', { align: 'center' })
+            .text('SECCION CENTRAL', { align: 'center' })
+            .moveDown(1.5);
 
-          // Foto (si existe)
-          let photoY = doc.y;
+          doc
+            .fontSize(12)
+            .text('FICHA DE DATOS DEL EMPLEADO POLICIAL', { align: 'center', underline: true });
+            
+          doc.moveDown(1);
+
+          // --- RECUADRO FOTO ---
+          const photoX = (doc.page.width - 120) / 2; // Centrado
+          const photoY = doc.y;
+          const photoWidth = 120;
+          const photoHeight = 140;
+
+          // Dibujar recuadro
+          doc.rect(photoX, photoY, photoWidth, photoHeight).stroke();
+
+          // Cargar foto si existe
           if (personal.fotoUrl) {
             try {
               const photoPath = path.join(
@@ -365,10 +379,10 @@ class PDFService {
                 personal.fotoUrl.replace('/uploads/', '')
               );
               if (fs.existsSync(photoPath)) {
-                doc.image(photoPath, 450, photoY, {
-                  width: 100,
-                  height: 120,
-                  fit: [100, 120],
+                doc.image(photoPath, photoX + 1, photoY + 1, {
+                  width: photoWidth - 2,
+                  height: photoHeight - 2,
+                  fit: [photoWidth - 2, photoHeight - 2],
                 });
               }
             } catch (err) {
@@ -376,207 +390,173 @@ class PDFService {
             }
           }
 
-          // Información en dos columnas
+          let y = photoY + photoHeight + 30;
+          const leftMargin = 50;
+          const contentWidth = doc.page.width - 100;
+
+          // --- DATOS PERSONALES ---
+          // Dibujar recuadro de título
+          doc.rect(leftMargin, y, contentWidth, 20).stroke();
+          doc.fontSize(11).font('Helvetica-Bold').text('DATOS PERSONALES', leftMargin + 5, y + 5);
+          
+          y += 30;
           doc.fontSize(10);
-          const leftX = 50;
-          const rightX = 300;
-          let y = photoY;
 
-          // Columna izquierda
-          doc.font('Helvetica-Bold').text('DATOS PERSONALES', leftX, y);
+          // Helper para líneas punteadas
+          const drawDottedLine = (x, y, width) => {
+            doc.save()
+               .dash(1, { space: 2 })
+               .moveTo(x, y)
+               .lineTo(x + width, y)
+               .stroke()
+               .restore();
+          };
+
+          // Apellido y Nombre
+          doc.font('Helvetica-Bold').text('Apellido y Nombre:', leftMargin, y);
+          const nameValue = `${personal.apellidos}, ${personal.nombres}`.toUpperCase();
+          doc.font('Helvetica').text(nameValue, leftMargin + 110, y);
+          drawDottedLine(leftMargin + 110, y + 10, contentWidth - 110);
+          
           y += 20;
+          // Nro. De prontuario
+          doc.font('Helvetica-Bold').text('Nro. De prontuario:', leftMargin, y);
+          const prontuarioValue = personal.prontuario || '';
+          doc.font('Helvetica').text(prontuarioValue, leftMargin + 110, y);
+          drawDottedLine(leftMargin + 110, y + 10, 150);
 
-          this.addFieldCompact(doc, 'Apellidos:', personal.apellidos, leftX, y);
-          y += 15;
-          this.addFieldCompact(doc, 'Nombres:', personal.nombres, leftX, y);
-          y += 15;
-          this.addFieldCompact(doc, 'DNI/CI:', personal.dni, leftX, y);
-          y += 15;
-          this.addFieldCompact(doc, 'CUIL:', personal.cuil || 'N/A', leftX, y);
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Fecha Nac.:',
-            this.formatDate(personal.fechaNacimiento),
-            leftX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Sexo:',
-            personal.sexo === 'M' ? 'Masculino' : 'Femenino',
-            leftX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Estado Civil:',
-            personal.estadoCivil || 'N/A',
-            leftX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Profesión:',
-            personal.profesion || 'N/A',
-            leftX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Prontuario:',
-            personal.prontuario || 'N/A',
-            leftX,
-            y
-          );
+          y += 20;
+          // Jerarquía y Legajo Personal
+          doc.font('Helvetica-Bold').text('Jerarquía:', leftMargin, y);
+          doc.font('Helvetica').text(personal.jerarquia?.nombre || '', leftMargin + 60, y);
+          drawDottedLine(leftMargin + 60, y + 10, 180);
 
+          doc.font('Helvetica-Bold').text('Legajo Personal:', leftMargin + 250, y);
+          doc.font('Helvetica').text(personal.numeroAsignacion || '', leftMargin + 350, y);
+          drawDottedLine(leftMargin + 350, y + 10, 150);
+
+          y += 20;
+          // Pertenece a División/Sección
+          doc.font('Helvetica-Bold').text('Pertenece a División/Sección:', leftMargin, y);
+          doc.font('Helvetica').text(personal.seccion?.nombre || '', leftMargin + 170, y);
+          drawDottedLine(leftMargin + 170, y + 10, contentWidth - 170);
+
+          y += 20;
+          // DNI y CUIT/CUIL
+          doc.font('Helvetica-Bold').text('DNI:', leftMargin, y);
+          doc.font('Helvetica').text(personal.dni || '', leftMargin + 30, y);
+          drawDottedLine(leftMargin + 30, y + 10, 150);
+
+          doc.font('Helvetica-Bold').text('CUIT / CUIL:', leftMargin + 200, y);
+          doc.font('Helvetica').text(personal.cuil || '', leftMargin + 280, y);
+          drawDottedLine(leftMargin + 280, y + 10, 150);
+
+          y += 20;
+          // Fecha de Nacimiento y Nacionalidad
+          doc.font('Helvetica-Bold').text('Fecha de Nacimiento:', leftMargin, y);
+          doc.font('Helvetica').text(this.formatDate(personal.fechaNacimiento), leftMargin + 120, y);
+          drawDottedLine(leftMargin + 120, y + 10, 120);
+
+          doc.font('Helvetica-Bold').text('Nacionalidad:', leftMargin + 260, y);
+          doc.font('Helvetica').text(personal.nacionalidad || 'ARGENTINA', leftMargin + 340, y);
+          drawDottedLine(leftMargin + 340, y + 10, 150);
+
+          y += 20;
+          // Domicilio y Localidad
+          doc.font('Helvetica-Bold').text('Domicilio:', leftMargin, y);
+          doc.font('Helvetica').text(personal.domicilio || '', leftMargin + 60, y);
+          drawDottedLine(leftMargin + 60, y + 10, 250);
+
+          doc.font('Helvetica-Bold').text('Localidad:', leftMargin + 320, y);
+          doc.font('Helvetica').text(personal.localidad || 'TUCUMÁN', leftMargin + 380, y);
+          drawDottedLine(leftMargin + 380, y + 10, 120);
+
+          y += 20;
+          // Domicilio Alternativo
+          doc.font('Helvetica-Bold').text('Domicilio Alternativo:', leftMargin, y);
+          doc.font('Helvetica').text('', leftMargin + 120, y); // Campo vacío por defecto si no existe en BD
+          drawDottedLine(leftMargin + 120, y + 10, contentWidth - 120);
+
+          y += 20;
+          // Grupo Sanguineo
+          doc.font('Helvetica-Bold').text('Grupo Sanguineo:', leftMargin, y);
+          doc.font('Helvetica').text(personal.grupoSanguineo || '', leftMargin + 100, y);
+          drawDottedLine(leftMargin + 100, y + 10, 150);
+
+          y += 20;
+          // Teléfono Personal y Alternativo
+          doc.font('Helvetica-Bold').text('Teléfono Personal:', leftMargin, y);
+          doc.font('Helvetica').text(personal.celular || '', leftMargin + 100, y);
+          drawDottedLine(leftMargin + 100, y + 10, 150);
+
+          doc.font('Helvetica-Bold').text('Teléfono Alternativo:', leftMargin + 260, y);
+          doc.font('Helvetica').text(personal.telefonoFijo || '', leftMargin + 370, y);
+          drawDottedLine(leftMargin + 370, y + 10, 130);
+
+          y += 40;
+
+          // --- OTROS ---
+          doc.rect(leftMargin, y, contentWidth, 20).stroke();
+          doc.fontSize(11).font('Helvetica-Bold').text('OTROS', leftMargin + 5, y + 5);
+          
           y += 30;
-          doc.font('Helvetica-Bold').text('CONTACTO', leftX, y);
-          y += 20;
-          this.addFieldCompact(
-            doc,
-            'Celular:',
-            personal.celular || 'N/A',
-            leftX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Email:',
-            personal.email || 'N/A',
-            leftX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Domicilio:',
-            personal.domicilio || 'N/A',
-            leftX,
-            y
-          );
+          doc.fontSize(10);
 
-          // Columna derecha
-          y = photoY + 140;
-          doc.font('Helvetica-Bold').text('DATOS LABORALES', rightX, y);
-          y += 20;
-          this.addFieldCompact(
-            doc,
-            'N° Asignación:',
-            personal.numeroAsignacion || 'N/A',
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Tipo Personal:',
-            personal.tipoPersonal,
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Jerarquía:',
-            personal.jerarquia?.nombre || 'N/A',
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'N° Cargo:',
-            personal.numeroCargo || 'N/A',
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Sección:',
-            personal.seccion?.nombre || 'N/A',
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Función Depto:',
-            personal.funcionDepto || 'N/A',
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Horario:',
-            personal.horarioLaboral || 'N/A',
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Alta Depend.:',
-            this.formatDate(personal.altaDependencia),
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Jurisdicción:',
-            personal.jurisdiccion || 'N/A',
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Regional:',
-            personal.regional || 'N/A',
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'Subsidio Salud:',
-            personal.subsidioSalud || 'N/A',
-            rightX,
-            y
-          );
+          // Carnet de Manejo
+          doc.font('Helvetica-Bold').text('Carnet de Manejo posee:', leftMargin, y);
+          const poseeCarnet = personal.poseeCarnetManejo ? 'SI' : 'NO';
+          doc.font('Helvetica').text(`SI   /   NO    (${poseeCarnet})`, leftMargin + 130, y);
 
-          y += 30;
-          doc.font('Helvetica-Bold').text('ARMAMENTO', rightX, y);
           y += 20;
-          this.addFieldCompact(
-            doc,
-            'Tipo Arma:',
-            personal.armaTipo || 'N/A',
-            rightX,
-            y
-          );
-          y += 15;
-          this.addFieldCompact(
-            doc,
-            'N° Arma:',
-            personal.nroArma || 'N/A',
-            rightX,
-            y
-          );
+          // Conduce
+          doc.font('Helvetica-Bold').text('Conduce:', leftMargin, y);
+          
+          // Checkboxes simulados
+          const checkAuto = personal.conduceAutos ? '[ X ]' : '[   ]';
+          const checkMoto = personal.conduceMotos ? '[ X ]' : '[   ]';
+          const checkOtros = personal.conduceOtros ? '[ X ]' : '[   ]';
+
+          doc.font('Helvetica').text(`Autos ${checkAuto}`, leftMargin + 60, y);
+          doc.text(`Motos ${checkMoto}`, leftMargin + 140, y);
+          doc.text(`Otros ${checkOtros}`, leftMargin + 220, y);
+
+          y += 20;
+          // Alta de Repartición
+          doc.font('Helvetica-Bold').text('Alta de Repartición:', leftMargin, y);
+          doc.font('Helvetica').text(this.formatDate(personal.altaReparticion) || '', leftMargin + 110, y);
+          drawDottedLine(leftMargin + 110, y + 10, 200);
+
+          y += 20;
+          // Alta Departamental
+          doc.font('Helvetica-Bold').text('Alta Departamental:', leftMargin, y);
+          doc.font('Helvetica').text(this.formatDate(personal.altaDependencia) || '', leftMargin + 110, y);
+          drawDottedLine(leftMargin + 110, y + 10, 200);
+
+          y += 20;
+          // Chaleco Provisto
+          doc.font('Helvetica-Bold').text('Chaleco Provisto:', leftMargin, y);
+          const poseeChaleco = personal.poseeChalecoAsignado ? 'SI' : 'NO';
+          doc.font('Helvetica').text(`SI   /   NO    (${poseeChaleco})`, leftMargin + 100, y);
+
+          doc.font('Helvetica-Bold').text('N° de Serie:', leftMargin + 250, y);
+          // Asumiendo que no hay campo específico para serie de chaleco en el modelo actual, dejo espacio
+          drawDottedLine(leftMargin + 320, y + 10, 150);
+
+          y += 20;
+          // Arma provista
+          doc.font('Helvetica-Bold').text('Arma provista: Marca:', leftMargin, y);
+          doc.font('Helvetica').text(personal.armaTipo || '', leftMargin + 120, y);
+          drawDottedLine(leftMargin + 120, y + 10, 150);
+
+          doc.font('Helvetica-Bold').text('N° de Serie:', leftMargin + 280, y);
+          doc.font('Helvetica').text(personal.nroArma || '', leftMargin + 350, y);
+          drawDottedLine(leftMargin + 350, y + 10, 150);
 
           // Pie de página
           doc
             .fontSize(8)
             .text(
-              `Generado: ${format(new Date(), 'dd/MM/yyyy HH:mm', {
+              `Generado el: ${format(new Date(), 'dd/MM/yyyy HH:mm', {
                 locale: es,
               })}`,
               50,

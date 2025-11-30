@@ -808,22 +808,77 @@ const PersonalSearch = () => {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() =>
-                                  navigate(`/personal/${personal.id}`)
-                                }
+                                onClick={() => {
+                                  if (
+                                    personal.archivosAdjuntos &&
+                                    personal.archivosAdjuntos.length > 0
+                                  ) {
+                                    const ultimoArchivo =
+                                      personal.archivosAdjuntos[
+                                        personal.archivosAdjuntos.length - 1
+                                      ];
+                                    window.open(
+                                      `http://localhost:3000${ultimoArchivo.url}`,
+                                      '_blank'
+                                    );
+                                  } else {
+                                    alert(
+                                      'Este personal no tiene archivos adjuntos.'
+                                    );
+                                  }
+                                }}
                                 className="h-8 w-8 p-0 hover:bg-blue-100 hover:text-blue-600"
+                                title="Descargar Adjunto"
                               >
-                                <Eye className="w-4 h-4" />
+                                <Download className="w-4 h-4" />
                               </Button>
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() =>
-                                  navigate(`/personal/editar/${personal.id}`)
-                                }
-                                className="h-8 w-8 p-0 hover:bg-amber-100 hover:text-amber-600"
+                                onClick={async () => {
+                                  try {
+                                    const response = await fetch(
+                                      '/api/personal/planillas',
+                                      {
+                                        method: 'POST',
+                                        headers: {
+                                          'Content-Type': 'application/json',
+                                          Authorization: `Bearer ${localStorage.getItem(
+                                            'token'
+                                          )}`,
+                                        },
+                                        body: JSON.stringify({
+                                          ids: [personal.id],
+                                        }),
+                                      }
+                                    );
+
+                                    if (!response.ok)
+                                      throw new Error(
+                                        'Error al generar planilla'
+                                      );
+
+                                    const blob = await response.blob();
+                                    const url = window.URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = `planilla-${personal.apellidos}-${personal.nombres}.pdf`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    window.URL.revokeObjectURL(url);
+                                    document.body.removeChild(a);
+                                  } catch (error) {
+                                    console.error(
+                                      'Error al descargar planilla:',
+                                      error
+                                    );
+                                    alert('Error al generar la planilla');
+                                  }
+                                }}
+                                className="h-8 w-8 p-0 hover:bg-green-100 hover:text-green-600"
+                                title="Generar Planilla"
                               >
-                                <Edit className="w-4 h-4" />
+                                <FileDown className="w-4 h-4" />
                               </Button>
                             </div>
                           </td>
