@@ -111,13 +111,14 @@ export default function Dashboard() {
               transition={{ delay: 0.2 }}
             >
               <motion.div
-                className="relative w-14 h-14 bg-gradient-to-br from-police-navy via-police-navy-dark to-police-navy rounded-2xl flex items-center justify-center shadow-xl border-2 border-police-cyan/50"
+                className="relative w-20 h-20 bg-gradient-to-br from-police-navy via-police-navy-dark to-police-navy rounded-2xl flex items-center justify-center shadow-xl border-2 border-police-cyan/50 p-1"
                 whileHover={{ scale: 1.05, rotate: 5 }}
                 transition={{ type: 'spring', stiffness: 400 }}
               >
-                <Shield
-                  className="h-8 w-8 text-white drop-shadow-lg"
-                  strokeWidth={2.5}
+                <img
+                  src="/escudo.png"
+                  alt="Escudo"
+                  className="w-full h-full object-contain drop-shadow-lg"
                 />
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-police-cyan rounded-full border-2 border-white shadow-lg animate-pulse" />
               </motion.div>

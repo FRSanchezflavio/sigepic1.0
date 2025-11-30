@@ -87,23 +87,23 @@ export default function Login() {
             style={{ clipPath: 'polygon(0 0, 100% 0, 85% 100%, 0% 100%)' }}
           />
 
-          <div className="relative z-10 max-w-md">
+          <div className="relative z-1 max-w-md">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1, rotate: [0, 360] }}
               transition={{
-                duration: 1,
+                duration: 0.5,
                 rotate: { duration: 20, repeat: Infinity, ease: 'linear' },
               }}
               className="mb-8"
             >
-              <div className="w-32 h-32 mx-auto bg-gradient-to-br from-police-navy to-police-navy-dark rounded-2xl flex items-center justify-center shadow-2xl shadow-police-cyan/50 border-2 border-police-cyan/30">
-                <Shield className="w-16 h-16 text-white" strokeWidth={1.5} />
+              <div className="w-80 h-80 mx-auto bg-gradient-to-br from-police-navy to-police-navy-dark rounded-2xl flex items-center justify-center shadow-2xl shadow-police-cyan/50 border-2 border-police-cyan/30 p-4">
+                <img src="/escudo.png" alt="Escudo" className="w-full h-full object-contain drop-shadow-2xl" />
               </div>
             </motion.div>
 
             <motion.h1
-              className="text-5xl font-bold mb-4 bg-gradient-to-r from-police-cyan via-cyan-300 to-police-cyan bg-clip-text text-transparent"
+              className="text-5xl font-bold mb-4 mt-19 pt-5 bg-gradient-to-r from-police-cyan via-cyan-300 to-police-cyan bg-clip-text text-transparent"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -165,8 +165,8 @@ export default function Login() {
             >
               {/* Logo mobile */}
               <div className="lg:hidden mb-8 text-center">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-police-navy to-police-navy-dark rounded-2xl flex items-center justify-center mb-4 border-2 border-police-cyan/30">
-                  <Shield className="w-10 h-10 text-white" />
+                <div className="w-40 h-40 mx-auto bg-gradient-to-br from-police-navy to-police-navy-dark rounded-2xl flex items-center justify-center mb-4 border-2 border-police-cyan/30 p-2">
+                  <img src="/escudo.png" alt="Escudo" className="w-full h-full object-contain" />
                 </div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-police-cyan to-cyan-400 bg-clip-text text-transparent">
                   SIGEPIC
