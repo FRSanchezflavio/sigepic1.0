@@ -162,11 +162,11 @@ export default function PersonalList() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-slate-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-8">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-20 right-20 w-96 h-96 bg-police-cyan/10 rounded-full blur-3xl"
+          className="absolute top-20 right-20 w-96 h-96 bg-police-cyan/10 dark:bg-police-cyan/5 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -174,7 +174,7 @@ export default function PersonalList() {
           transition={{ duration: 8, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-20 left-20 w-96 h-96 bg-police-navy/10 rounded-full blur-3xl"
+          className="absolute bottom-20 left-20 w-96 h-96 bg-police-navy/10 dark:bg-police-cyan/5 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.4, 0.2, 0.4],
@@ -183,7 +183,7 @@ export default function PersonalList() {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 text-foreground">
         {/* Header */}
         <motion.div
           className="mb-10"
@@ -193,7 +193,7 @@ export default function PersonalList() {
           <Button
             variant="ghost"
             onClick={() => navigate('/dashboard')}
-            className="mb-6 hover:bg-white/80 hover:shadow-md transition-all"
+            className="mb-6 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-md transition-all text-slate-700 dark:text-slate-300"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver al Dashboard
@@ -202,7 +202,7 @@ export default function PersonalList() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
             <div>
               <motion.h1
-                className="text-5xl font-extrabold leading-tight bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan bg-clip-text text-transparent mb-4"
+                className="text-5xl font-extrabold leading-tight bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan dark:from-white dark:via-blue-200 dark:to-cyan-400 bg-clip-text text-transparent mb-4"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
@@ -210,7 +210,7 @@ export default function PersonalList() {
                 Personal
               </motion.h1>
               <motion.p
-                className="text-lg text-slate-600 font-medium"
+                className="text-lg text-slate-600 dark:text-slate-400 font-medium"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -227,7 +227,7 @@ export default function PersonalList() {
               <Button 
                 onClick={() => navigate('/personal/nuevo')}
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 dark:from-blue-700 dark:to-cyan-700 dark:hover:from-blue-600 dark:hover:to-cyan-600 text-white shadow-lg border-0"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 Nuevo Personal
@@ -242,7 +242,7 @@ export default function PersonalList() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="p-4 mb-6 backdrop-blur-sm bg-white/80 border-slate-200 shadow-xl">
+          <Card className="p-4 mb-6 backdrop-blur-sm bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 shadow-xl">
             <div className="flex gap-4 items-center">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -250,30 +250,31 @@ export default function PersonalList() {
                   placeholder="Buscar por nombre, DNI, número de asignación..."
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  className="w-full pl-10 border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full pl-10 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 focus:border-blue-500 focus:ring-blue-500 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                 />
               </div>
               
               <Button 
                 variant={Object.keys(activeFilters).length > 0 ? "default" : "outline"}
                 onClick={() => setIsFilterOpen(true)}
-                className="border-slate-300 hover:bg-slate-50"
+                className="border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
               </Button>
 
               <Dialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-                <DialogContent className="sm:max-w-[425px]" onClose={() => setIsFilterOpen(false)}>
+                <DialogContent className="sm:max-w-[425px] bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800" onClose={() => setIsFilterOpen(false)}>
                   <DialogHeader>
-                    <DialogTitle>Filtros de Búsqueda</DialogTitle>
+                    <DialogTitle className="text-slate-900 dark:text-slate-100">Filtros de Búsqueda</DialogTitle>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
-                      <Label>Tipo de Personal</Label>
+                      <Label className="text-slate-700 dark:text-slate-300">Tipo de Personal</Label>
                       <Select 
                         value={filters.tipoPersonal} 
                         onChange={(e) => setFilters({...filters, tipoPersonal: e.target.value})}
+                        className="bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100"
                       >
                         <option value="">Seleccionar tipo</option>
                         <SelectItem value="POLICIAL">Policial</SelectItem>
@@ -281,26 +282,29 @@ export default function PersonalList() {
                       </Select>
                     </div>
                     <div className="grid gap-2">
-                      <Label>Jerarquía</Label>
+                      <Label className="text-slate-700 dark:text-slate-300">Jerarquía</Label>
                       <Input 
                         value={filters.jerarquia}
                         onChange={(e) => setFilters({...filters, jerarquia: e.target.value})}
                         placeholder="Ej: Comisario"
+                        className="bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                       />
                     </div>
                     <div className="grid gap-2">
-                      <Label>Sección</Label>
+                      <Label className="text-slate-700 dark:text-slate-300">Sección</Label>
                       <Input 
                         value={filters.seccion}
                         onChange={(e) => setFilters({...filters, seccion: e.target.value})}
                         placeholder="Ej: Investigaciones"
+                        className="bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                       />
                     </div>
                     <div className="grid gap-2">
-                      <Label>Estado</Label>
+                      <Label className="text-slate-700 dark:text-slate-300">Estado</Label>
                       <Select 
                         value={filters.estadoServicio} 
                         onChange={(e) => setFilters({...filters, estadoServicio: e.target.value})}
+                        className="bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100"
                       >
                         <option value="">Seleccionar estado</option>
                         <SelectItem value="ACTIVO">Activo</SelectItem>
@@ -312,8 +316,8 @@ export default function PersonalList() {
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={handleClearFilters}>Limpiar</Button>
-                    <Button onClick={handleApplyFilters}>Aplicar Filtros</Button>
+                    <Button variant="outline" onClick={handleClearFilters} className="border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Limpiar</Button>
+                    <Button onClick={handleApplyFilters} className="bg-police-navy dark:bg-blue-600 text-white hover:bg-police-navy-light dark:hover:bg-blue-700">Aplicar Filtros</Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -322,7 +326,7 @@ export default function PersonalList() {
                 variant="outline" 
                 onClick={handleExport} 
                 disabled={exporting}
-                className="border-slate-300 hover:bg-slate-50"
+                className="border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
               >
                 <Download className="h-4 w-4 mr-2" />
                 {exporting ? 'Exportando...' : 'Exportar'}
@@ -340,73 +344,73 @@ export default function PersonalList() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <Card className="backdrop-blur-sm bg-white/80 border-slate-200 shadow-xl">
+            <Card className="backdrop-blur-sm bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-slate-50/50 border-b border-slate-200">
+                  <thead className="bg-slate-50/50 dark:bg-slate-950/50 border-b border-slate-200 dark:border-slate-800">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">N° Asignación</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Apellidos y Nombres</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Jerarquía</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Cargo</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Sección y Función</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Horario</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Profesión</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Celular</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Alta Dep.</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">DNI</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">CUIL</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Fecha Nac.</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Estado Civil</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Sexo</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Email</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Domicilio</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Jurisdicción</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Regional</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Arma</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Chaleco</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Estado</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase whitespace-nowrap sticky right-0 bg-slate-50 shadow-l">Acciones</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">N° Asignación</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Apellidos y Nombres</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Jerarquía</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Cargo</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Sección y Función</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Horario</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Profesión</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Celular</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Alta Dep.</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">DNI</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">CUIL</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Fecha Nac.</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Estado Civil</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Sexo</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Email</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Domicilio</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Jurisdicción</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Regional</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Arma</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Chaleco</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap">Estado</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-slate-400 uppercase whitespace-nowrap sticky right-0 bg-slate-50 dark:bg-slate-950 shadow-l">Acciones</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white/50 divide-y divide-slate-200">
+                  <tbody className="bg-white/50 dark:bg-slate-900/50 divide-y divide-slate-200 dark:divide-slate-800">
                     {personal.map((p, index) => (
                       <motion.tr 
                         key={p.id} 
-                        className="hover:bg-blue-50/50 transition-colors"
+                        className="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
                       >
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{p.numeroAsignacion || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900 font-medium">{p.apellidos}, {p.nombres}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.jerarquia || p.jerarquiaId || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.numeroCargo || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-slate-100">{p.numeroAsignacion || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-slate-100 font-medium">{p.apellidos}, {p.nombres}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.jerarquia || p.jerarquiaId || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.numeroCargo || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                           <div className="flex flex-col">
                             <span className="font-medium">{p.seccion || p.seccionId || '-'}</span>
-                            <span className="text-xs text-slate-400">{p.funcionDepto}</span>
+                            <span className="text-xs text-slate-400 dark:text-slate-500">{p.funcionDepto}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.horarioLaboral || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.profesion || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.celular || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.horarioLaboral || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.profesion || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.celular || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                           {p.altaDependencia ? new Date(p.altaDependencia).toLocaleDateString() : '-'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.dni}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.cuil || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.fechaNacimiento || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.estadoCivil || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.sexo || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.email || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.domicilio || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.jurisdiccion || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{p.regional || '-'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.dni}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.cuil || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.fechaNacimiento || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.estadoCivil || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.sexo || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.email || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.domicilio || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.jurisdiccion || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{p.regional || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                           {p.armaTipo ? `${p.armaTipo} - ${p.nroArma || ''}` : '-'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                           {p.poseeChalecoAsignado ? `SI (${p.nroSerieChalecoAsignado || ''})` : 'NO'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -415,8 +419,8 @@ export default function PersonalList() {
                             onChange={(e) => handleStatusChange(p.id, e.target.value)}
                             className={`w-[140px] h-8 text-xs ${
                               p.estadoServicio === 'ACTIVO' 
-                                ? 'bg-cyan-50 text-cyan-900 border-cyan-200' 
-                                : 'bg-gray-50 text-gray-900 border-gray-200'
+                                ? 'bg-cyan-50 dark:bg-cyan-950/30 text-cyan-900 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800' 
+                                : 'bg-gray-50 dark:bg-gray-800/50 text-gray-900 dark:text-gray-300 border-gray-200 dark:border-gray-700'
                             }`}
                           >
                             <SelectItem value="ACTIVO">ACTIVO</SelectItem>
@@ -426,16 +430,16 @@ export default function PersonalList() {
                             <SelectItem value="DISPONIBILIDAD">DISPONIBILIDAD</SelectItem>
                           </Select>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium sticky right-0 bg-white/80 backdrop-blur-sm shadow-l">
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium sticky right-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-l">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => navigate(`/personal/editar/${p.id}`)}
                             title="Editar"
-                            className="hover:bg-blue-100 hover:text-blue-700"
+                            className="hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-300"
                           >
-                            <Edit className="h-4 w-4 text-slate-500 hover:text-blue-600" />
-                            <span className="ml-2">Editar</span>
+                            <Edit className="h-4 w-4 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300" />
+                            <span className="ml-2 text-slate-600 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-300">Editar</span>
                           </Button>
                         </td>
                       </motion.tr>
@@ -445,8 +449,8 @@ export default function PersonalList() {
               </div>
 
               {/* Paginación */}
-              <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-slate-50/50">
-                <div className="text-sm text-slate-700">
+              <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/50">
+                <div className="text-sm text-slate-700 dark:text-slate-400">
                   Mostrando {(pagination.page - 1) * pagination.limit + 1} a{' '}
                   {Math.min(pagination.page * pagination.limit, pagination.total)}{' '}
                   de {pagination.total} registros
@@ -459,7 +463,7 @@ export default function PersonalList() {
                     onClick={() =>
                       setPagination(prev => ({ ...prev, page: prev.page - 1 }))
                     }
-                    className="border-slate-300 hover:bg-white"
+                    className="border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300"
                   >
                     Anterior
                   </Button>
@@ -470,7 +474,7 @@ export default function PersonalList() {
                     onClick={() =>
                       setPagination(prev => ({ ...prev, page: prev.page + 1 }))
                     }
-                    className="border-slate-300 hover:bg-white"
+                    className="border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300"
                   >
                     Siguiente
                   </Button>

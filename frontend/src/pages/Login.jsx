@@ -37,7 +37,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-police-navy-dark via-police-navy to-slate-800">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-white dark:from-police-navy-dark dark:via-police-navy dark:to-slate-800">
       {/* Animated background particles */}
       <div className="absolute inset-0">
         {[...Array(20)].map((_, i) => (
@@ -112,7 +112,7 @@ export default function Login() {
             </motion.h1>
 
             <motion.p
-              className="text-xl text-slate-300 mb-8"
+              className="text-xl text-slate-600 dark:text-slate-300 mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
@@ -121,7 +121,7 @@ export default function Login() {
             </motion.p>
 
             <motion.div
-              className="space-y-4 text-slate-400"
+              className="space-y-4 text-slate-500 dark:text-slate-400"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -158,7 +158,7 @@ export default function Login() {
           <div className="w-full max-w-md">
             {/* Glassmorphism card */}
             <motion.div
-              className="backdrop-blur-xl bg-white/5 rounded-3xl p-8 shadow-2xl border border-white/10"
+              className="backdrop-blur-xl bg-white/80 dark:bg-white/5 rounded-3xl p-8 shadow-2xl border border-slate-200 dark:border-white/10"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -174,10 +174,10 @@ export default function Login() {
               </div>
 
               <div className="mb-8">
-                <h3 className="text-2xl font-bold text-white mb-2">
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                   Bienvenido
                 </h3>
-                <p className="text-slate-400">
+                <p className="text-slate-600 dark:text-slate-400">
                   Ingresa tus credenciales para continuar
                 </p>
               </div>
@@ -197,18 +197,18 @@ export default function Login() {
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="username" className="text-slate-300">
+                  <Label htmlFor="username" className="text-slate-700 dark:text-slate-300">
                     Usuario
                   </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 dark:text-slate-400" />
                     <Input
                       id="username"
                       name="username"
                       type="text"
                       value={formData.username}
                       onChange={handleChange}
-                      className="pl-11 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20"
+                      className="pl-11 bg-white dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-blue-500 dark:focus:border-blue-500/50 focus:ring-blue-500/20"
                       placeholder="Ingresa tu usuario"
                       required
                       autoComplete="username"
@@ -217,18 +217,18 @@ export default function Login() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-slate-300">
+                  <Label htmlFor="password" className="text-slate-700 dark:text-slate-300">
                     Contraseña
                   </Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 dark:text-slate-400" />
                     <Input
                       id="password"
                       name="password"
                       type={showPassword ? 'text' : 'password'}
                       value={formData.password}
                       onChange={handleChange}
-                      className="pl-11 pr-11 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20"
+                      className="pl-11 pr-11 bg-white dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-blue-500 dark:focus:border-blue-500/50 focus:ring-blue-500/20"
                       placeholder="Ingresa tu contraseña"
                       required
                       autoComplete="current-password"
@@ -236,7 +236,7 @@ export default function Login() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors"
                     >
                       {showPassword ? (
                         <EyeOff className="w-5 h-5" />

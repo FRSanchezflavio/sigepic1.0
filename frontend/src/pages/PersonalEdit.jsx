@@ -322,11 +322,11 @@ const PersonalEdit = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-20 right-20 w-96 h-96 bg-police-cyan/10 rounded-full blur-3xl"
+          className="absolute top-20 right-20 w-96 h-96 bg-police-cyan/10 dark:bg-police-cyan/5 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -334,7 +334,7 @@ const PersonalEdit = () => {
           transition={{ duration: 8, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-20 left-20 w-96 h-96 bg-police-navy/10 rounded-full blur-3xl"
+          className="absolute bottom-20 left-20 w-96 h-96 bg-police-navy/10 dark:bg-police-cyan/5 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.4, 0.2, 0.4],
@@ -353,7 +353,7 @@ const PersonalEdit = () => {
           <Button
             variant="ghost"
             onClick={() => navigate('/dashboard')}
-            className="mb-6 hover:bg-white/80 hover:shadow-md transition-all"
+            className="mb-6 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-md transition-all text-slate-700 dark:text-slate-300"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver al Dashboard
@@ -362,7 +362,7 @@ const PersonalEdit = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
             <div>
               <motion.h1
-                className="text-5xl font-extrabold leading-tight bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan bg-clip-text text-transparent mb-4"
+                className="text-5xl font-extrabold leading-tight bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan dark:from-white dark:via-blue-200 dark:to-cyan-400 bg-clip-text text-transparent mb-4"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
@@ -370,7 +370,7 @@ const PersonalEdit = () => {
                 Editar Personal
               </motion.h1>
               <motion.p
-                className="text-lg text-slate-600 font-medium"
+                className="text-lg text-slate-600 dark:text-slate-400 font-medium"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -411,7 +411,7 @@ const PersonalEdit = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-5 bg-red-50/90 backdrop-blur-sm border-l-4 border-red-500 rounded-xl text-red-700 shadow-lg"
+            className="mb-6 p-5 bg-red-50/90 dark:bg-red-900/20 backdrop-blur-sm border-l-4 border-red-500 rounded-xl text-red-700 dark:text-red-400 shadow-lg"
           >
             <div className="flex items-start gap-3">
               <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -432,8 +432,8 @@ const PersonalEdit = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <Card className="bg-white/80 backdrop-blur-md border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-police-navy to-police-cyan flex items-center justify-center">
                     <Camera className="w-5 h-5 text-white" />
@@ -470,18 +470,18 @@ const PersonalEdit = () => {
                   <div className="flex-1 w-full">
                     <div
                       {...getFotoRootProps()}
-                      className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-police-cyan hover:bg-police-cyan/5 transition-all duration-300 hover:shadow-lg"
+                      className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-8 text-center cursor-pointer hover:border-police-cyan hover:bg-police-cyan/5 transition-all duration-300 hover:shadow-lg"
                     >
                       <input {...getFotoInputProps()} />
                       <div className="flex flex-col items-center gap-3">
-                        <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                           <Upload className="w-8 h-8 text-police-cyan" />
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-slate-700">
+                          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                             Click para seleccionar o arrastre una foto
                           </p>
-                          <p className="text-xs text-slate-500 mt-1">
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                             PNG, JPG • Máximo 5MB
                           </p>
                         </div>
@@ -522,8 +522,8 @@ const PersonalEdit = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <Card className="bg-white/80 backdrop-blur-md border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-police-navy to-police-cyan flex items-center justify-center">
                     <User className="w-5 h-5 text-white" />
@@ -697,8 +697,8 @@ const PersonalEdit = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <Card className="bg-white/80 backdrop-blur-md border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-police-navy to-police-cyan flex items-center justify-center">
                     <Briefcase className="w-5 h-5 text-white" />
@@ -826,8 +826,8 @@ const PersonalEdit = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
           >
-            <Card className="bg-white/80 backdrop-blur-md border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-police-navy to-police-cyan flex items-center justify-center">
                     <Phone className="w-5 h-5 text-white" />
@@ -874,8 +874,8 @@ const PersonalEdit = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
           >
-            <Card className="bg-white/80 backdrop-blur-md border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-police-navy to-police-cyan flex items-center justify-center">
                     <Shield className="w-5 h-5 text-white" />
@@ -946,8 +946,8 @@ const PersonalEdit = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.85 }}
           >
-            <Card className="bg-white/80 backdrop-blur-md border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-police-navy to-police-cyan flex items-center justify-center">
                     <FileText className="w-5 h-5 text-white" />
@@ -1081,8 +1081,8 @@ const PersonalEdit = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
           >
-            <Card className="bg-white/80 backdrop-blur-md border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <CardHeader className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <CardHeader className="border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-police-navy to-police-cyan flex items-center justify-center">
                     <FileText className="w-5 h-5 text-white" />
@@ -1098,18 +1098,18 @@ const PersonalEdit = () => {
               <CardContent className="pt-6">
                 <div
                   {...getArchivosRootProps()}
-                  className="border-2 border-dashed border-slate-300 rounded-xl p-10 text-center cursor-pointer hover:border-police-cyan hover:bg-gradient-to-br hover:from-police-cyan/5 hover:to-transparent transition-all duration-300 hover:shadow-lg"
+                  className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-10 text-center cursor-pointer hover:border-police-cyan hover:bg-gradient-to-br hover:from-police-cyan/5 hover:to-transparent transition-all duration-300 hover:shadow-lg"
                 >
                   <input {...getArchivosInputProps()} />
                   <div className="flex flex-col items-center gap-3">
-                    <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                       <Upload className="w-10 h-10 text-police-cyan" />
                     </div>
                     <div>
-                      <p className="text-base font-semibold text-slate-700 mb-1">
+                      <p className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Click para seleccionar o arrastre archivos aquí
                       </p>
-                      <p className="text-sm text-slate-500">
+                      <p className="text-sm text-slate-500 dark:text-slate-400">
                         PDF, PNG, JPG • Máximo 10MB cada uno
                       </p>
                     </div>
@@ -1137,7 +1137,7 @@ const PersonalEdit = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-white rounded-xl border border-slate-200 hover:shadow-md transition-shadow"
+                        className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow"
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-lg bg-police-navy/10 flex items-center justify-center">
@@ -1148,11 +1148,11 @@ const PersonalEdit = () => {
                               href={archivo.url} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="text-sm font-medium text-slate-700 hover:text-blue-600 hover:underline"
+                              className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-blue-600 hover:underline"
                             >
                               {archivo.nombre}
                             </a>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-slate-500 dark:text-slate-400">
                               {(archivo.tamano / 1024).toFixed(1)} KB • {new Date(archivo.fecha).toLocaleDateString()}
                             </p>
                           </div>
@@ -1184,17 +1184,17 @@ const PersonalEdit = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-white rounded-xl border border-slate-200 hover:shadow-md transition-shadow"
+                        className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow"
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-lg bg-police-cyan/10 flex items-center justify-center">
                             <FileText className="w-5 h-5 text-police-cyan" />
                           </div>
                           <div>
-                            <span className="text-sm font-medium text-slate-700">
+                            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                               {archivo.name}
                             </span>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-slate-500 dark:text-slate-400">
                               {(archivo.size / 1024).toFixed(1)} KB
                             </p>
                           </div>
@@ -1222,7 +1222,7 @@ const PersonalEdit = () => {
 
           {/* Botones */}
           <motion.div
-            className="sticky bottom-0 bg-gradient-to-t from-white via-white/95 to-transparent pt-8 pb-6 mt-8 backdrop-blur-sm"
+            className="sticky bottom-0 bg-gradient-to-t from-white via-white/95 to-transparent dark:from-slate-950 dark:via-slate-950/95 pt-8 pb-6 mt-8 backdrop-blur-sm"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
@@ -1233,7 +1233,7 @@ const PersonalEdit = () => {
                 variant="outline"
                 onClick={() => navigate('/dashboard')}
                 disabled={loading}
-                className="px-6 py-6 text-base font-semibold border-2 hover:bg-slate-50 hover:border-slate-400 transition-all"
+                className="px-6 py-6 text-base font-semibold border-2 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-400 dark:border-slate-700 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 transition-all"
               >
                 <X className="w-5 h-5 mr-2" />
                 Cancelar

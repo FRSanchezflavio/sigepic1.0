@@ -44,6 +44,41 @@
     --police-accent: #ca8a04;
     --police-bg: #f1f5f9;
   }
+
+  .dark {
+    --background: 222 47% 11%; /* Slate 900 */
+    --foreground: 210 40% 98%; /* Slate 50 */
+    
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
+    
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 212 26% 87%;
+
+    /* Theme specific overrides for dark mode */
+    --police-primary: #334155;
+    --police-secondary: #475569;
+    --police-bg: #0f172a;
+  }
 }
 
 @layer base {
@@ -51,6 +86,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
   }
 }

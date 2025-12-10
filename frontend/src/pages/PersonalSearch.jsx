@@ -207,11 +207,11 @@ const PersonalSearch = () => {
   }, [sortField, sortOrder]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 dark:from-slate-950 dark:via-blue-950/20 dark:to-slate-950 p-6">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
+          className="absolute top-20 right-20 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -219,7 +219,7 @@ const PersonalSearch = () => {
           transition={{ duration: 8, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-20 left-20 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          className="absolute bottom-20 left-20 w-96 h-96 bg-cyan-500/10 dark:bg-cyan-500/5 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.5, 0.3, 0.5],
@@ -238,7 +238,7 @@ const PersonalSearch = () => {
           <Button
             variant="ghost"
             onClick={() => navigate('/dashboard')}
-            className="mb-6 hover:bg-white/80 hover:shadow-md transition-all"
+            className="mb-6 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-md transition-all"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver al Dashboard
@@ -247,7 +247,7 @@ const PersonalSearch = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
             <div>
               <motion.h1
-                className="text-5xl font-extrabold leading-tight bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan bg-clip-text text-transparent mb-4"
+                className="text-5xl font-extrabold leading-tight bg-gradient-to-r from-police-navy via-police-navy-light to-police-cyan dark:from-sky-300 dark:via-blue-400 dark:to-cyan-300 bg-clip-text text-transparent mb-4"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
@@ -255,7 +255,7 @@ const PersonalSearch = () => {
                 Búsqueda Avanzada de Personal
               </motion.h1>
               <motion.p
-                className="text-lg text-slate-600 font-medium"
+                className="text-lg text-slate-600 dark:text-slate-400 font-medium"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -298,18 +298,18 @@ const PersonalSearch = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="mb-6 backdrop-blur-sm bg-white/80 border-slate-200 shadow-xl">
-            <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50/50 border-b border-slate-200">
+          <Card className="mb-6 backdrop-blur-sm bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 shadow-xl">
+            <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50/50 dark:from-slate-900 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Filter className="w-5 h-5 text-blue-600" />
+                  <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                    <Filter className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <CardTitle className="text-lg font-bold text-slate-900">
+                    <CardTitle className="text-lg font-bold text-slate-900 dark:text-slate-100">
                       Criterios de Búsqueda
                     </CardTitle>
-                    <p className="text-sm text-slate-500 mt-0.5">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                       Filtre por múltiples parámetros simultáneamente
                     </p>
                   </div>
@@ -318,7 +318,7 @@ const PersonalSearch = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowFilters(!showFilters)}
-                  className="text-slate-600 hover:text-slate-900"
+                  className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
                 >
                   {showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros'}
                 </Button>
@@ -329,7 +329,7 @@ const PersonalSearch = () => {
               <CardContent className="p-6">
                 {/* Búsqueda General */}
                 <div className="mb-6">
-                  <Label className="text-sm font-semibold text-slate-700 mb-2 block">
+                  <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">
                     Búsqueda General
                   </Label>
                   <div className="relative">
@@ -339,7 +339,7 @@ const PersonalSearch = () => {
                       value={filtros.search}
                       onChange={handleChange}
                       placeholder="Buscar por apellido, nombre, DNI, legajo..."
-                      className="pl-12 h-12 text-base border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                      className="pl-12 h-12 text-base border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 focus:border-blue-500 focus:ring-blue-500"
                       onKeyPress={e => e.key === 'Enter' && handleBuscar()}
                     />
                   </div>
@@ -348,14 +348,14 @@ const PersonalSearch = () => {
                 {/* Filtros Principales */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-slate-700">
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                       Tipo de Personal
                     </Label>
                     <select
                       name="tipoPersonal"
                       value={filtros.tipoPersonal}
                       onChange={handleChange}
-                      className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full h-11 px-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">Todos</option>
                       <option value="SUPERIOR">Superior</option>
@@ -364,14 +364,14 @@ const PersonalSearch = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-slate-700">
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                       Jerarquía
                     </Label>
                     <select
                       name="jerarquia"
                       value={filtros.jerarquia}
                       onChange={handleChange}
-                      className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full h-11 px-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">Todas</option>
                       <optgroup label="Superiores">
@@ -392,14 +392,14 @@ const PersonalSearch = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-slate-700">
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                       Sección
                     </Label>
                     <select
                       name="seccion"
                       value={filtros.seccion}
                       onChange={handleChange}
-                      className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full h-11 px-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">Todas</option>
                       {secciones.map(s => (
@@ -411,14 +411,14 @@ const PersonalSearch = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-slate-700">
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                       Estado de Servicio
                     </Label>
                     <select
                       name="estadoServicio"
                       value={filtros.estadoServicio}
                       onChange={handleChange}
-                      className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full h-11 px-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">Todos</option>
                       <option value="ACTIVO">Activo</option>
@@ -432,13 +432,13 @@ const PersonalSearch = () => {
 
                 {/* Filtros Adicionales */}
                 <details className="group mb-4">
-                  <summary className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-blue-600 hover:text-blue-700 mb-3">
+                  <summary className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-3">
                     <ChevronRight className="w-4 h-4 transition-transform group-open:rotate-90" />
                     Filtros Adicionales
                   </summary>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-3 pl-6">
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                         Jurisdicción
                       </Label>
                       <Input
@@ -446,12 +446,12 @@ const PersonalSearch = () => {
                         value={filtros.jurisdiccion}
                         onChange={handleChange}
                         placeholder="Ej: CRIA 1ra"
-                        className="border-slate-300"
+                        className="border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                         Regional
                       </Label>
                       <Input
@@ -459,19 +459,19 @@ const PersonalSearch = () => {
                         value={filtros.regional}
                         onChange={handleChange}
                         placeholder="Ej: Tucumán"
-                        className="border-slate-300"
+                        className="border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                         Sexo
                       </Label>
                       <select
                         name="sexo"
                         value={filtros.sexo}
                         onChange={handleChange}
-                        className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full h-11 px-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">Todos</option>
                         <option value="M">Masculino</option>
@@ -480,14 +480,14 @@ const PersonalSearch = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                         Estado Civil
                       </Label>
                       <select
                         name="estadoCivil"
                         value={filtros.estadoCivil}
                         onChange={handleChange}
-                        className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full h-11 px-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">Todos</option>
                         <option value="SOLTERO">Soltero/a</option>
@@ -499,14 +499,14 @@ const PersonalSearch = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                         Grupo Sanguíneo
                       </Label>
                       <select
                         name="grupoSanguineo"
                         value={filtros.grupoSanguineo}
                         onChange={handleChange}
-                        className="w-full h-11 px-3 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full h-11 px-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">Todos</option>
                         <option value="A+">A+</option>
@@ -523,8 +523,8 @@ const PersonalSearch = () => {
                 </details>
 
                 {/* Acciones */}
-                <div className="flex justify-between items-center pt-4 border-t border-slate-200">
-                  <div className="text-sm text-slate-500">
+                <div className="flex justify-between items-center pt-4 border-t border-slate-200 dark:border-slate-800">
+                  <div className="text-sm text-slate-500 dark:text-slate-400">
                     {Object.values(filtros).filter(v => v !== '').length >
                       0 && (
                       <span>
@@ -537,7 +537,7 @@ const PersonalSearch = () => {
                     <Button
                       variant="outline"
                       onClick={handleLimpiar}
-                      className="border-slate-300 hover:bg-slate-50"
+                      className="border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-300"
                     >
                       <X className="w-4 h-4 mr-2" />
                       Limpiar
@@ -574,18 +574,18 @@ const PersonalSearch = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="backdrop-blur-sm bg-white/80 border-slate-200 shadow-xl">
-              <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50/50 border-b border-slate-200">
+            <Card className="backdrop-blur-sm bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 shadow-xl">
+              <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50/50 dark:from-slate-900 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-green-100 rounded-lg">
-                      <Users className="w-5 h-5 text-green-600" />
+                    <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                      <Users className="w-5 h-5 text-green-600 dark:text-green-400" />
                     </div>
                     <div>
-                      <CardTitle className="text-lg font-bold text-slate-900">
+                      <CardTitle className="text-lg font-bold text-slate-900 dark:text-slate-100">
                         Resultados de Búsqueda
                       </CardTitle>
-                      <p className="text-sm text-slate-500 mt-0.5">
+                      <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                         {total} registro{total !== 1 ? 's' : ''} encontrado
                         {total !== 1 ? 's' : ''}
                         {seleccionados.length > 0 &&
@@ -600,7 +600,7 @@ const PersonalSearch = () => {
                       variant="ghost"
                       size="sm"
                       onClick={handleSeleccionarTodos}
-                      className="text-slate-600 hover:text-slate-900"
+                      className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
                     >
                       {seleccionados.length === resultados.length
                         ? 'Deseleccionar todos'
@@ -613,7 +613,7 @@ const PersonalSearch = () => {
               <CardContent className="p-0">
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-slate-100 border-b border-slate-200">
+                    <thead className="bg-slate-100 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
                       <tr>
                         <th className="p-4 w-12 text-center">
                           <input
@@ -623,7 +623,7 @@ const PersonalSearch = () => {
                               resultados.length > 0
                             }
                             onChange={handleSeleccionarTodos}
-                            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                            className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
                           />
                         </th>
                         <th className="p-4 text-left">
@@ -643,7 +643,7 @@ const PersonalSearch = () => {
                         <th className="p-4 text-left">
                           <button
                             onClick={() => handleSort('dni')}
-                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 hover:text-slate-900"
+                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100"
                           >
                             Identificación
                             {sortField === 'dni' &&
@@ -657,7 +657,7 @@ const PersonalSearch = () => {
                         <th className="p-4 text-left">
                           <button
                             onClick={() => handleSort('jerarquia')}
-                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 hover:text-slate-900"
+                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100"
                           >
                             Jerarquía
                             {sortField === 'jerarquia' &&
@@ -668,13 +668,13 @@ const PersonalSearch = () => {
                               ))}
                           </button>
                         </th>
-                        <th className="p-4 text-left font-semibold text-sm text-slate-700">
+                        <th className="p-4 text-left font-semibold text-sm text-slate-700 dark:text-slate-300">
                           Sección
                         </th>
                         <th className="p-4 text-center">
                           <button
                             onClick={() => handleSort('estadoServicio')}
-                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 hover:text-slate-900"
+                            className="flex items-center gap-2 font-semibold text-sm text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100"
                           >
                             Estado
                             {sortField === 'estadoServicio' &&
@@ -685,19 +685,19 @@ const PersonalSearch = () => {
                               ))}
                           </button>
                         </th>
-                        <th className="p-4 text-center font-semibold text-sm text-slate-700">
+                        <th className="p-4 text-center font-semibold text-sm text-slate-700 dark:text-slate-300">
                           Acciones
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                       {resultados.map((personal, index) => (
                         <motion.tr
                           key={personal.id}
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.02 }}
-                          className="hover:bg-blue-50/50 transition-colors"
+                          className="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors"
                         >
                           <td className="p-4 text-center">
                             <input
@@ -706,12 +706,12 @@ const PersonalSearch = () => {
                               onChange={() =>
                                 handleToggleSeleccion(personal.id)
                               }
-                              className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                              className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
                             />
                           </td>
                           <td className="p-4">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-cyan-100 overflow-hidden flex-shrink-0 border-2 border-white shadow-sm">
+                              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 overflow-hidden flex-shrink-0 border-2 border-white dark:border-slate-700 shadow-sm">
                                 {personal.fotoUrl ? (
                                   <img
                                     src={personal.fotoUrl}
@@ -725,15 +725,15 @@ const PersonalSearch = () => {
                                 )}
                               </div>
                               <div>
-                                <div className="font-bold text-slate-900">
+                                <div className="font-bold text-slate-900 dark:text-slate-100">
                                   {personal.apellidos}, {personal.nombres}
                                 </div>
-                                <div className="text-xs text-slate-500 flex items-center gap-2">
-                                  <span className="px-2 py-0.5 bg-slate-100 rounded text-slate-600 font-medium">
+                                <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                                  <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-300 font-medium">
                                     {personal.tipoPersonal}
                                   </span>
                                   {personal.sexo && (
-                                    <span className="text-slate-400">
+                                    <span className="text-slate-400 dark:text-slate-500">
                                       •{' '}
                                       {personal.sexo === 'M'
                                         ? 'Masculino'
@@ -747,19 +747,19 @@ const PersonalSearch = () => {
                           <td className="p-4">
                             <div className="space-y-1">
                               <div className="flex items-center gap-2">
-                                <span className="text-xs font-medium text-slate-500">
+                                <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
                                   DNI:
                                 </span>
-                                <span className="font-semibold text-slate-900">
+                                <span className="font-semibold text-slate-900 dark:text-slate-200">
                                   {personal.dni}
                                 </span>
                               </div>
                               {personal.numeroAsignacion && (
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xs font-medium text-slate-500">
+                                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
                                     Leg:
                                   </span>
-                                  <span className="text-sm text-slate-700">
+                                  <span className="text-sm text-slate-700 dark:text-slate-300">
                                     {personal.numeroAsignacion}
                                   </span>
                                 </div>
@@ -768,22 +768,22 @@ const PersonalSearch = () => {
                           </td>
                           <td className="p-4">
                             <div className="space-y-1">
-                              <div className="font-semibold text-slate-900">
+                              <div className="font-semibold text-slate-900 dark:text-slate-200">
                                 {personal.jerarquia || '-'}
                               </div>
                               {personal.cargo && (
-                                <div className="text-xs text-slate-500">
+                                <div className="text-xs text-slate-500 dark:text-slate-400">
                                   {personal.cargo}
                                 </div>
                               )}
                             </div>
                           </td>
                           <td className="p-4">
-                            <div className="text-sm text-slate-700">
+                            <div className="text-sm text-slate-700 dark:text-slate-300">
                               {personal.seccion || '-'}
                             </div>
                             {personal.jurisdiccion && (
-                              <div className="text-xs text-slate-500 mt-1">
+                              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                                 {personal.jurisdiccion}
                               </div>
                             )}
@@ -792,12 +792,12 @@ const PersonalSearch = () => {
                             <span
                               className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
                                 personal.estadoServicio === 'ACTIVO'
-                                  ? 'bg-green-100 text-green-700 border border-green-200'
+                                  ? 'bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800'
                                   : personal.estadoServicio === 'LICENCIA'
-                                  ? 'bg-yellow-100 text-yellow-700 border border-yellow-200'
+                                  ? 'bg-yellow-100 text-yellow-700 border border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800'
                                   : personal.estadoServicio === 'SUSPENSION'
-                                  ? 'bg-orange-100 text-orange-700 border border-orange-200'
-                                  : 'bg-slate-100 text-slate-600 border border-slate-200'
+                                  ? 'bg-orange-100 text-orange-700 border border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-800'
+                                  : 'bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'
                               }`}
                             >
                               {personal.estadoServicio || 'N/D'}
@@ -827,7 +827,7 @@ const PersonalSearch = () => {
                                     );
                                   }
                                 }}
-                                className="h-8 w-8 p-0 hover:bg-blue-100 hover:text-blue-600"
+                                className="h-8 w-8 p-0 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400"
                                 title="Descargar Adjunto"
                               >
                                 <Download className="w-4 h-4" />
@@ -875,7 +875,7 @@ const PersonalSearch = () => {
                                     alert('Error al generar la planilla');
                                   }
                                 }}
-                                className="h-8 w-8 p-0 hover:bg-green-100 hover:text-green-600"
+                                className="h-8 w-8 p-0 hover:bg-green-100 dark:hover:bg-green-900/30 hover:text-green-600 dark:hover:text-green-400"
                                 title="Generar Planilla"
                               >
                                 <FileDown className="w-4 h-4" />
@@ -890,8 +890,8 @@ const PersonalSearch = () => {
 
                 {/* Paginación */}
                 {totalPages > 1 && (
-                  <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-                    <div className="text-sm text-slate-600">
+                  <div className="p-4 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <div className="text-sm text-slate-600 dark:text-slate-400">
                       Página {page} de {totalPages}
                     </div>
                     <div className="flex gap-2">
@@ -903,7 +903,7 @@ const PersonalSearch = () => {
                           handleBuscar(false);
                         }}
                         disabled={page === 1}
-                        className="border-slate-300"
+                        className="border-slate-300 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Anterior
                       </Button>
@@ -915,7 +915,7 @@ const PersonalSearch = () => {
                           handleBuscar(false);
                         }}
                         disabled={page === totalPages}
-                        className="border-slate-300"
+                        className="border-slate-300 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Siguiente
                       </Button>
@@ -933,15 +933,15 @@ const PersonalSearch = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-center py-20 backdrop-blur-sm bg-white/60 border-2 border-dashed border-slate-300 rounded-2xl"
+            className="text-center py-20 backdrop-blur-sm bg-white/60 dark:bg-slate-900/60 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl"
           >
-            <div className="bg-gradient-to-br from-blue-100 to-cyan-100 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Search className="w-10 h-10 text-blue-600" />
+            <div className="bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <Search className="w-10 h-10 text-blue-600 dark:text-blue-400" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">
               Inicie una búsqueda
             </h3>
-            <p className="text-slate-500 max-w-md mx-auto">
+            <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto">
               {filtros.search || Object.values(filtros).some(v => v !== '')
                 ? 'No se encontraron resultados con los criterios especificados.'
                 : 'Utilice los filtros de búsqueda para encontrar personal en el sistema.'}
@@ -960,8 +960,8 @@ const PersonalSearch = () => {
         {searching && (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-lg font-medium text-slate-700">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 dark:border-blue-400 mx-auto mb-4"></div>
+              <p className="text-lg font-medium text-slate-700 dark:text-slate-300">
                 Buscando personal...
               </p>
             </div>

@@ -91,7 +91,7 @@ const PersonalDetail = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 p-6 flex items-center justify-center">
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
@@ -101,7 +101,7 @@ const PersonalDetail = () => {
 
   if (!personal) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 p-6 flex items-center justify-center">
         <Alert variant="destructive">
           <AlertDescription>Personal no encontrado</AlertDescription>
         </Alert>
@@ -110,7 +110,7 @@ const PersonalDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 p-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
@@ -120,10 +120,10 @@ const PersonalDetail = () => {
               Volver
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">
                 {personal.nombres} {personal.apellidos}
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-600 dark:text-slate-400 mt-1">
                 CI: {personal.ci} {personal.expedicion} |{' '}
                 {personal.jerarquia?.nombre}
               </p>
@@ -152,7 +152,7 @@ const PersonalDetail = () => {
         {/* Información Principal */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           {/* Foto */}
-          <Card>
+          <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-lg">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center">
                 {personal.foto ? (
@@ -162,8 +162,8 @@ const PersonalDetail = () => {
                     className="w-40 h-40 rounded-full object-cover mb-4"
                   />
                 ) : (
-                  <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center mb-4">
-                    <span className="text-5xl text-gray-400">
+                  <div className="w-40 h-40 rounded-full bg-gray-200 dark:bg-slate-800 flex items-center justify-center mb-4">
+                    <span className="text-5xl text-gray-400 dark:text-slate-500">
                       {personal.nombres[0]}
                       {personal.apellidos[0]}
                     </span>
@@ -171,10 +171,10 @@ const PersonalDetail = () => {
                 )}
                 <div className="text-center">
                   {getStatusBadge(personal.estado)}
-                  <p className="text-sm text-gray-600 mt-2">
+                  <p className="text-sm text-gray-600 dark:text-slate-400 mt-2">
                     {personal.jerarquia?.nombre}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-slate-400">
                     {personal.seccion?.nombre}
                   </p>
                 </div>
@@ -183,25 +183,25 @@ const PersonalDetail = () => {
           </Card>
 
           {/* Información Rápida */}
-          <Card className="md:col-span-2">
+          <Card className="md:col-span-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-lg">
             <CardHeader>
               <CardTitle>Información de Contacto</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-gray-400" />
+                <Phone className="w-5 h-5 text-gray-400 dark:text-slate-500" />
                 <span>{personal.telefono || 'No registrado'}</span>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-gray-400" />
+                <Mail className="w-5 h-5 text-gray-400 dark:text-slate-500" />
                 <span>{personal.correo || 'No registrado'}</span>
               </div>
               <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-gray-400" />
+                <MapPin className="w-5 h-5 text-gray-400 dark:text-slate-500" />
                 <span>{personal.direccion || 'No registrado'}</span>
               </div>
               <div className="flex items-center gap-3">
-                <Calendar className="w-5 h-5 text-gray-400" />
+                <Calendar className="w-5 h-5 text-gray-400 dark:text-slate-500" />
                 <span>
                   Fecha de Ingreso: {formatDate(personal.fecha_ingreso)}
                 </span>
@@ -213,7 +213,7 @@ const PersonalDetail = () => {
         {/* Detalles Completos */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Datos Personales */}
-          <Card>
+          <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-lg">
             <CardHeader>
               <CardTitle>Datos Personales</CardTitle>
             </CardHeader>
@@ -244,7 +244,7 @@ const PersonalDetail = () => {
           </Card>
 
           {/* Datos Policiales */}
-          <Card>
+          <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-lg">
             <CardHeader>
               <CardTitle>Datos Policiales</CardTitle>
             </CardHeader>
@@ -268,7 +268,7 @@ const PersonalDetail = () => {
           </Card>
 
           {/* Contacto de Emergencia */}
-          <Card>
+          <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-lg">
             <CardHeader>
               <CardTitle>Contacto de Emergencia</CardTitle>
             </CardHeader>
@@ -285,7 +285,7 @@ const PersonalDetail = () => {
           </Card>
 
           {/* Información Adicional */}
-          <Card>
+          <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-lg">
             <CardHeader>
               <CardTitle>Información del Sistema</CardTitle>
             </CardHeader>
@@ -339,9 +339,9 @@ const PersonalDetail = () => {
 
 // Componente auxiliar para mostrar información
 const InfoRow = ({ label, value }) => (
-  <div className="flex justify-between py-1 border-b border-gray-100">
-    <span className="font-medium text-gray-600">{label}:</span>
-    <span className="text-gray-900">{value}</span>
+  <div className="flex justify-between py-1 border-b border-gray-100 dark:border-slate-800">
+    <span className="font-medium text-gray-600 dark:text-slate-400">{label}:</span>
+    <span className="text-gray-900 dark:text-slate-100">{value}</span>
   </div>
 );
 
