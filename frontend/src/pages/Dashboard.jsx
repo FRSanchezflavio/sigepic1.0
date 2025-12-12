@@ -26,7 +26,8 @@ export default function Dashboard() {
       description: 'Registrar nuevo personal del Departamento D-2',
       icon: UserPlus,
       path: '/personal/agregar',
-      gradient: 'from-police-navy to-police-navy-dark',
+      gradientLight: 'from-police-navy to-police-navy-dark',
+      gradientDark: 'dark:from-police-cyan dark:to-cyan-400',
       bgGradient: 'from-police-cyan/20 to-cyan-400/10',
       iconColor: 'text-police-navy',
     },
@@ -35,7 +36,8 @@ export default function Dashboard() {
       description: 'Buscar y descargar planillas del personal',
       icon: Search,
       path: '/personal/buscar',
-      gradient: 'from-police-cyan to-cyan-400',
+      gradientLight: 'from-police-cyan to-cyan-400',
+      gradientDark: 'dark:from-police-cyan dark:to-cyan-400',
       bgGradient: 'from-police-navy/10 to-police-navy-light/10',
       iconColor: 'text-police-navy',
     },
@@ -44,7 +46,8 @@ export default function Dashboard() {
       description: 'Modificar información del personal existente',
       icon: UserCog,
       path: '/personal',
-      gradient: 'from-police-navy-light to-police-navy',
+      gradientLight: 'from-police-navy-light to-police-navy',
+      gradientDark: 'dark:from-police-cyan dark:to-cyan-400',
       bgGradient: 'from-cyan-300/10 to-police-cyan/10',
       iconColor: 'text-police-navy',
     },
@@ -116,7 +119,7 @@ export default function Dashboard() {
                 transition={{ type: 'spring', stiffness: 400 }}
               >
                 <img
-                  src="/escudo.png"
+                  src="/escudo2.png"
                   alt="Escudo"
                   className="w-full h-full object-contain drop-shadow-lg"
                 />
@@ -231,7 +234,7 @@ export default function Dashboard() {
                 >
                   {/* Card Header with Icon */}
                   <div
-                    className={`bg-gradient-to-br ${option.gradient} p-5 relative overflow-hidden`}
+                    className={`bg-gradient-to-br ${option.gradientLight} ${option.gradientDark} p-5 relative overflow-hidden`}
                   >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl transform translate-x-8 -translate-y-8" />
                     <motion.div
@@ -295,7 +298,13 @@ export default function Dashboard() {
             <div className="flex items-center gap-2 px-5 py-2.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
               <div className="w-2 h-2 bg-police-cyan rounded-full" />
               <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                Versión 1.0
+                Versión .0
+              </span>
+            </div>
+            <div className="flex items-center gap-2 px-5 py-2.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+              <div className="w-2 h-2 bg-police-cyan rounded-full" />
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                Desarrollado por: SANZ TECH
               </span>
             </div>
             <div className="flex items-center gap-2 px-5 py-2.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">

@@ -143,6 +143,16 @@ const crear = async (req, res, next) => {
       datos.archivosAdjuntos = archivos;
     }
 
+    // Manejar contactos adicionales (viene como JSON string desde FormData)
+    if (datos.contactosAdicionales) {
+      try {
+        datos.contactosAdicionales = JSON.parse(datos.contactosAdicionales);
+      } catch (e) {
+        console.error('Error parsing contactosAdicionales:', e);
+        datos.contactosAdicionales = [];
+      }
+    }
+
     // Limpiar campos vacíos o null (excepto booleanos que pueden ser false)
     Object.keys(datos).forEach(key => {
       if (
@@ -254,6 +264,17 @@ const actualizar = async (req, res, next) => {
         : [];
       
       datos.archivosAdjuntos = [...archivosAnteriores, ...nuevosArchivos];
+    }
+
+    // Manejar contactos adicionales (viene como JSON string desde FormData)
+    if (datos.contactosAdicionales) {
+      try {
+        datos.contactosAdicionales = JSON.parse(datos.contactosAdicionales);
+      } catch (e) {
+        console.error('Error parsing contactosAdicionales:', e);
+        // Mantener los contactos anteriores si hay error
+        datos.contactosAdicionales = anterior.contactosAdicionales || [];
+      }
     }
 
     // Limpiar campos vacíos o null (excepto booleanos)

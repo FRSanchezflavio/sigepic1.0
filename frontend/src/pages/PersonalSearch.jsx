@@ -454,13 +454,19 @@ const PersonalSearch = () => {
                       <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                         Regional
                       </Label>
-                      <Input
+                      <select
                         name="regional"
                         value={filtros.regional}
                         onChange={handleChange}
-                        placeholder="Ej: Tucumán"
-                        className="border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                      />
+                        className="w-full h-11 px-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="">Todas</option>
+                        <option value="CAPITAL">Capital</option>
+                        <option value="NORTE">Norte</option>
+                        <option value="SUR">Sur</option>
+                        <option value="ESTE">Este</option>
+                        <option value="OESTE">Oeste</option>
+                      </select>
                     </div>
 
                     <div className="space-y-2">

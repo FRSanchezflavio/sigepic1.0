@@ -98,7 +98,7 @@ export default function Login() {
               className="mb-8"
             >
               <div className="w-80 h-80 mx-auto bg-gradient-to-br from-police-navy to-police-navy-dark rounded-2xl flex items-center justify-center shadow-2xl shadow-police-cyan/50 border-2 border-police-cyan/30 p-4">
-                <img src="/escudo.png" alt="Escudo" className="w-full h-full object-contain drop-shadow-2xl" />
+                <img src="../public/escudo2.png" alt="Escudo" className="w-full h-full object-contain drop-shadow-2xl" />
               </div>
             </motion.div>
 
@@ -166,7 +166,7 @@ export default function Login() {
               {/* Logo mobile */}
               <div className="lg:hidden mb-8 text-center">
                 <div className="w-40 h-40 mx-auto bg-gradient-to-br from-police-navy to-police-navy-dark rounded-2xl flex items-center justify-center mb-4 border-2 border-police-cyan/30 p-2">
-                  <img src="/escudo.png" alt="Escudo" className="w-full h-full object-contain" />
+                  <img src="../public/escudo1.png" alt="Escudo" className="w-full h-full object-contain" />
                 </div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-police-cyan to-cyan-400 bg-clip-text text-transparent">
                   SIGEPIC

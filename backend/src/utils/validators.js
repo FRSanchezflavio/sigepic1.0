@@ -64,7 +64,7 @@ const schemaPersonal = Joi.object({
   subsidioSalud: Joi.string().max(50).allow(null, ''),
   prontuario: Joi.string().max(50).allow(null, ''),
   jurisdiccion: Joi.string().max(100).allow(null, ''),
-  regional: Joi.string().max(100).allow(null, ''),
+  regional: Joi.string().valid('CAPITAL', 'NORTE', 'SUR', 'ESTE', 'OESTE').allow(null, ''),
 
   // Equipamiento
   armaTipo: Joi.string().max(100).allow(null, ''),
@@ -104,7 +104,7 @@ const schemaPersonalActualizar = Joi.object({
   subsidioSalud: Joi.string().max(50).allow(null, ''),
   prontuario: Joi.string().max(50).allow(null, ''),
   jurisdiccion: Joi.string().max(100).allow(null, ''),
-  regional: Joi.string().max(100).allow(null, ''),
+  regional: Joi.string().valid('CAPITAL', 'NORTE', 'SUR', 'ESTE', 'OESTE').allow(null, ''),
   armaTipo: Joi.string().max(100).allow(null, ''),
   nroArma: Joi.string().max(50).allow(null, ''),
   chaleco: Joi.string().max(100).allow(null, ''),

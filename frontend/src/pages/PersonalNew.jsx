@@ -81,6 +81,7 @@ const PersonalNew = () => {
   const [poseeCarnet, setPoseeCarnet] = useState(false);
   const [poseeCredencial, setPoseeCredencial] = useState(false);
   const [poseeChalecoState, setPoseeChalecoState] = useState(false);
+  const [contactosAdicionales, setContactosAdicionales] = useState([]);
 
   // Jerarquías estáticas
   const jerarquiasSuperiores = [
@@ -204,6 +205,14 @@ const PersonalNew = () => {
       archivos.forEach(archivo => {
         formData.append('archivos', archivo);
       });
+
+      // Agregar contactos adicionales
+      if (contactosAdicionales.length > 0) {
+        const contactosValidos = contactosAdicionales.filter(c => c.valor.trim() !== '');
+        if (contactosValidos.length > 0) {
+          formData.append('contactosAdicionales', JSON.stringify(contactosValidos));
+        }
+      }
 
       console.log('Datos a enviar:');
       for (let pair of formData.entries()) {
@@ -717,7 +726,18 @@ const PersonalNew = () => {
 
                 <div>
                   <Label htmlFor="regional">Regional</Label>
-                  <Input id="regional" {...register('regional')} />
+                  <select
+                    id="regional"
+                    {...register('regional')}
+                    className="w-full px-3 py-2 border rounded-md bg-background"
+                  >
+                    <option value="">Seleccionar...</option>
+                    <option value="CAPITAL">Capital</option>
+                    <option value="NORTE">Norte</option>
+                    <option value="SUR">Sur</option>
+                    <option value="ESTE">Este</option>
+                    <option value="OESTE">Oeste</option>
+                  </select>
                 </div>
 
                 <div>
@@ -736,42 +756,110 @@ const PersonalNew = () => {
           >
             <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300">
               <CardHeader className="border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-police-navy to-police-cyan flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-white" />
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-police-navy to-police-cyan flex items-center justify-center">
+                      <Phone className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl">
+                        Información de Contacto
+                      </CardTitle>
+                    </div>
                   </div>
-                  <div>
-                    <CardTitle className="text-xl">
-                      Información de Contacto
-                    </CardTitle>
-                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setContactosAdicionales([...contactosAdicionales, { tipo: 'celular', valor: '' }])}
+                    className="hover:bg-police-cyan/10 hover:border-police-cyan hover:text-police-cyan dark:hover:bg-police-cyan/20"
+                  >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Agregar Contacto
+                  </Button>
                 </div>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="celular">Celular</Label>
-                  <Input
-                    id="celular"
-                    {...register('celular')}
-                    placeholder="Ej: +549 11 1234-5678"
-                  />
+              <CardContent className="pt-6">
+                {/* Contacto Principal */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <Label htmlFor="celular">Celular Principal</Label>
+                    <Input
+                      id="celular"
+                      {...register('celular')}
+                      placeholder="Ej: +549 11 1234-5678"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email">Email Principal</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      {...register('email')}
+                      placeholder="usuario@ejemplo.com"
+                      className={errors.email ? 'border-red-500' : ''}
+                    />
+                    {errors.email && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    {...register('email')}
-                    placeholder="usuario@ejemplo.com"
-                    className={errors.email ? 'border-red-500' : ''}
-                  />
-                  {errors.email && (
-                    <p className="text-xs text-red-500 mt-1">
-                      {errors.email.message}
+                {/* Contactos Adicionales */}
+                {contactosAdicionales.length > 0 && (
+                  <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+                      Contactos Adicionales
                     </p>
-                  )}
-                </div>
+                    {contactosAdicionales.map((contacto, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex items-center gap-3"
+                      >
+                        <select
+                          value={contacto.tipo}
+                          onChange={(e) => {
+                            const nuevosContactos = [...contactosAdicionales];
+                            nuevosContactos[index].tipo = e.target.value;
+                            setContactosAdicionales(nuevosContactos);
+                          }}
+                          className="w-32 px-3 py-2 border rounded-md bg-background text-sm"
+                        >
+                          <option value="celular">Celular</option>
+                          <option value="telefono">Teléfono</option>
+                          <option value="email">Email</option>
+                          <option value="emergencia">Emergencia</option>
+                        </select>
+                        <Input
+                          value={contacto.valor}
+                          onChange={(e) => {
+                            const nuevosContactos = [...contactosAdicionales];
+                            nuevosContactos[index].valor = e.target.value;
+                            setContactosAdicionales(nuevosContactos);
+                          }}
+                          placeholder={contacto.tipo === 'email' ? 'correo@ejemplo.com' : 'Número de teléfono'}
+                          className="flex-1"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setContactosAdicionales(contactosAdicionales.filter((_, i) => i !== index));
+                          }}
+                          className="hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </motion.div>

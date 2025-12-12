@@ -81,6 +81,7 @@ model Personal {
   poseeCredencialPolicial Boolean?       @default(false) @map("posee_credencial_policial")
   fotoUrl                 String?        @map("foto_url") @db.VarChar(255)
   archivosAdjuntos        Json           @default("[]") @map("archivos_adjuntos")
+  contactosAdicionales    Json           @default("[]") @map("contactos_adicionales")
   observaciones           String?
   createdAt               DateTime       @default(now()) @map("created_at")
   updatedAt               DateTime       @updatedAt @map("updated_at")
